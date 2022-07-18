@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MCUniverse.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCUniverse.Data;
 
@@ -8,5 +9,6 @@ public class AppDbContext : DbContext
     {
 
     }
+    public DbSet<FacultyEntity> Faculties { get; set; }
 }
         
