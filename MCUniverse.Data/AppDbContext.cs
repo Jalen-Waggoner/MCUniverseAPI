@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MCUniverse.Data.Entities;
-
 
 namespace MCUniverse.Data;
 
@@ -11,5 +10,6 @@ public class AppDbContext : DbContext
 
     }
     public DbSet<CourseEntity> Courses { get; set; }
+    public DbSet<FacultyEntity> Faculties { get; set; }
 }
         

@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MCUniverse.Data\MCUniverse.Data.csproj" />
     <ProjectReference Include="..\MCUniverse.Models\MCUniverse.Models.csproj" />
     <ProjectReference Include="..\MCUniverse.Services\MCUniverse.Services.csproj" />
