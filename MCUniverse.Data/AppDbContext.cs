@@ -8,5 +8,6 @@ public class AppDbContext : DbContext
     {
 
     }
+    public Dbset<CourseEntity> Courses { get; set; }
 }
         
