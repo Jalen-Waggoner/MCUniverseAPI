@@ -28,6 +28,7 @@ namespace MCUniverse.Data.Entities
         public string Building {get; set;} = null!;
         [Required]
         public int RoomNumber {get; set;}
+        public virtual List<Student> Students { get; set; } = new List<Student>();
     }
-    public List<StudentEntity> Students { get; set; } = new List<StudentEntity>;
+    
 }
