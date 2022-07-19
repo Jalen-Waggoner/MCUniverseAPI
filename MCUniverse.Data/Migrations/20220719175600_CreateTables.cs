@@ -1,11 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace MCUniverse.Data.Migrations
 {
-    public partial class Courses : Migration
+    public partial class CreateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,22 +14,28 @@ namespace MCUniverse.Data.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    faculty_id = table.Column<int>(type: "int", nullable: false),
+                    Faculty_id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    startTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    endTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ClassDay = table.Column<int>(type: "int", nullable: false),
+                    startTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    endTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    classDays = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Credits = table.Column<int>(type: "int", nullable: false),
                     Building = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomNumber = table.Column<int>(type: "int", nullable: false)
+                    roomNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Courses_Faculties_Faculty_id",
+                        column: x => x.Faculty_id,
+                        principalTable: "Faculties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Student",
+                name: "Students",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -44,7 +49,7 @@ namespace MCUniverse.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.Id);
+                    table.PrimaryKey("PK_Students", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,11 +57,11 @@ namespace MCUniverse.Data.Migrations
                 columns: table => new
                 {
                     Coursesid = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<int>(type: "int", nullable: false)
+                    studentsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseEntityStudent", x => new { x.Coursesid, x.StudentsId });
+                    table.PrimaryKey("PK_CourseEntityStudent", x => new { x.Coursesid, x.studentsId });
                     table.ForeignKey(
                         name: "FK_CourseEntityStudent_Courses_Coursesid",
                         column: x => x.Coursesid,
@@ -64,17 +69,22 @@ namespace MCUniverse.Data.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CourseEntityStudent_Student_StudentsId",
-                        column: x => x.StudentsId,
-                        principalTable: "Student",
+                        name: "FK_CourseEntityStudent_Students_studentsId",
+                        column: x => x.studentsId,
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseEntityStudent_StudentsId",
+                name: "IX_CourseEntityStudent_studentsId",
                 table: "CourseEntityStudent",
-                column: "StudentsId");
+                column: "studentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_Faculty_id",
+                table: "Courses",
+                column: "Faculty_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -86,7 +96,7 @@ namespace MCUniverse.Data.Migrations
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Students");
         }
     }
 }
