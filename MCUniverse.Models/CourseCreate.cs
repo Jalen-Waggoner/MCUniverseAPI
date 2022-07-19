@@ -12,9 +12,9 @@ namespace MCUniverse.Models
         [Required]
         public string Name { get; set; } = null!;
         [Required]
-        public TimeOnly startTime { get; set; }
+        public DateTime startTime { get; set; }
         [Required]
-        public TimeOnly endTime { get; set; }
+        public DateTime endTime { get; set; }
         [Required]
         public DayOfWeek ClassDay { get; set; }
         [Required]
