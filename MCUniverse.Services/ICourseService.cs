@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Services
 {
-    internal interface Interface1
+    public interface ICourseService
     {
     }
 }
