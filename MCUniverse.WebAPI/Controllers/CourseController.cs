@@ -38,33 +38,20 @@ namespace MCUniverse.WebAPI.Controllers
         }
 
         // GET: api/Course
-       // [HttpGet]
-       // public async Task<ActionResult<IEnumerable<CourseEntity>>> GetCourseEntity()
-       // {
-       //   if (_context.Courses == null)
-       //   {
-       //       return NotFound();
-       //   }
-       //     return await _context.Courses.ToListAsync();
-       // }
+        [HttpGet]
+        public async Task<IActionResult> GetCourseEntity()
+        {
+            var courses = await _cService.ShowAllCourses();
+            return Ok(courses);
+        }
 
        // // GET: api/Course/5
-       // [HttpGet("{id}")]
-       // public async Task<ActionResult<CourseEntity>> GetCourseEntity(int id)
-       // {
-       //   if (_context.Courses == null)
-       //   {
-       //       return NotFound();
-       //   }
-       //     var courseEntity = await _context.Courses.FindAsync(id);
-
-       //     if (courseEntity == null)
-       //     {
-       //         return NotFound();
-       //     }
-
-       //     return courseEntity;
-       // }
+       [HttpGet("{id}")]
+       public async Task<IActionResult> ShowCourseById([FromRoute] int id)
+        {
+            var course = await _cService.ShowCoursebyId(id);
+            return Ok(course);
+        }
 
        // // PUT: api/Course/5
        // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

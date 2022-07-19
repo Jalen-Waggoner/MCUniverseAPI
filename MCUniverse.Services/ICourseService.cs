@@ -10,5 +10,7 @@ namespace MCUniverse.Services
     public interface ICourseService
     {
         Task<bool> CreateCourse(CourseCreate newCourse);
+        Task<IEnumerable<CourseDetail>> ShowAllCourses();
+        Task<CourseDetail> ShowCoursebyId(int id);
     }
 }
