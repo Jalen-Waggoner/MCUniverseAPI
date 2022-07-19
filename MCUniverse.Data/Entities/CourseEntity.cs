@@ -17,9 +17,9 @@ namespace MCUniverse.Data.Entities
         [Required]
         public string Name {get; set;} = null!;
         [Required]
-        public TimeOnly startTime {get; set;}
+        public DateTime startTime {get; set;}
         [Required]
-        public TimeOnly endTime {get; set;}
+        public DateTime endTime {get; set;}
         [Required]
         public DayOfWeek ClassDay {get; set;}
         [Required]
@@ -28,6 +28,7 @@ namespace MCUniverse.Data.Entities
         public string Building {get; set;} = null!;
         [Required]
         public int RoomNumber {get; set;}
+        public virtual List<Student> Students { get; set; } = new List<Student>();
     }
-    public List<StudentEntity> Students { get; set; } = new List<StudentEntity>;
+    
 }
