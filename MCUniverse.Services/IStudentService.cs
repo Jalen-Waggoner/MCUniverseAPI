@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Services
 {
-    internal class Class1
+    public class IStudentService
     {
+        
     }
 }

@@ -12,35 +12,35 @@ namespace MCUniverse.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public StudentController(AppDbContext context)
+        public StudentsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Student
+        // GET: api/Students
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudent()
         {
-          if (_context.Student == null)
+          if (_context.Students == null)
           {
               return NotFound();
           }
-            return await _context.Student.ToListAsync();
+            return await _context.Students.ToListAsync();
         }
 
         // GET: api/Student/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(int id)
         {
-          if (_context.Student == null)
+          if (_context.Students == null)
           {
               return NotFound();
           }
-            var Student = await _context.Student.FindAsync(id);
+            var Student = await _context.Students.FindAsync(id);
 
             if (Student == null)
             {
@@ -50,17 +50,17 @@ namespace MCUniverse.WebAPI.Controllers
             return Student;
         }
 
-        // PUT: api/Student/5
+        // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student Student)
+        public async Task<IActionResult> PutStudents(int id, Student Students)
         {
-            if (id != Student.Id)
+            if (id != Students.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Student).State = EntityState.Modified;
+            _context.Entry(Students).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace MCUniverse.WebAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentExists(id))
+                if (!StudentsExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace MCUniverse.WebAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Student
+        // POST: api/Students
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Student>> PostStudent(Student Student)
+        public async Task<ActionResult<Student>> PostStudents(Student Students)
         {
-          if (_context.Student == null)
+          if (_context.Students == null)
           {
-              return Problem("Entity set 'MCUniverseWebAPIContext.Student'  is null.");
+              return Problem("Entity set 'MCUniverseWebAPIContext.Students'  is null.");
           }
-            _context.Student.Add(Student);
+            _context.Students.Add(Students);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStudent", new { id = Student.Id }, Student);
+            return CreatedAtAction("GetStudents", new { id = Students.Id }, Students);
         }
 
-        // DELETE: api/Student/5
+        // DELETE: api/Students/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        public async Task<IActionResult> DeleteStudents(int id)
         {
-            if (_context.Student == null)
+            if (_context.Students == null)
             {
                 return NotFound();
             }
-            var Student = await _context.Student.FindAsync(id);
-            if (Student == null)
+            var Students = await _context.Students.FindAsync(id);
+            if (Students == null)
             {
                 return NotFound();
             }
 
-            _context.Student.Remove(Student);
+            _context.Students.Remove(Students);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool StudentExists(int id)
+        private bool StudentsExists(int id)
         {
-            return (_context.Student?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Students?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

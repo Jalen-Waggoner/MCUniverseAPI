@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Models
 {
-    internal class Class1
+    internal class UpdateStudent
     {
+
     }
 }
