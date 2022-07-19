@@ -30,5 +30,4 @@ namespace MCUniverse.Data.Entities
         public int RoomNumber {get; set;}
         public virtual List<Student> Students { get; set; } = new List<Student>();
     }
-
 }

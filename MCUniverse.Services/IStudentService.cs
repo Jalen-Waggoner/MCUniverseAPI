@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCUniverse.Data.Entities
+namespace MCUniverse.Services
 {
     internal class Class1
     {
