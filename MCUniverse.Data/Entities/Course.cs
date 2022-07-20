@@ -12,22 +12,24 @@ namespace MCUniverse.Data.Entities
         [Key]
         public int Id { get; set; }
         [Required]
-        [ForeignKey("Faculty")]
+        [ForeignKey(nameof(Faculty))]
         public int Faculty_id {get; set;}
+        public FacultyEntity Faculty { get; set; }
         [Required]
         public string Name {get; set;} = null!;
         [Required]
-        public int StartTime {get; set;}
+        public string startTime {get; set;}
         [Required]
-        public int EndTime {get; set;}
+        public string endTime {get; set;}
         [Required]
-        public DayOfWeek ClassDay {get; set;}
+        public string classDays {get; set;}
         [Required]
         public int Credits {get; set;}
         [Required]
         public string Building {get; set;} = null!;
         [Required]
-        public int RoomNumber {get; set;}
-        public List<Student> Students { get; set; } = new List<Student>();
+        public int roomNumber {get; set;}
+        public virtual List<Student> students { get; set; } = new List<Student>();
     }
+    
 }

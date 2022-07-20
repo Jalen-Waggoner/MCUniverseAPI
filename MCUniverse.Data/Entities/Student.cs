@@ -24,6 +24,8 @@ namespace MCUniverse.Data.Entities
         public string PhoneNumber { get; set; }
         [Required]
         public string OriginCountry { get; set; } = null!;
-        public List<CourseEntity> Courses { get; set; } = new List<CourseEntity>();
+
+        public virtual List<CourseEntity> Courses { get; set; } = new List<CourseEntity>();
     }
+    
 }
