@@ -11,7 +11,7 @@ namespace MCUniverse.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-      
+          
         [Required]
         public string Name {get; set;} = null!;
         [Required]
@@ -27,7 +27,11 @@ namespace MCUniverse.Data.Entities
         [Required]
         public int roomNumber {get; set;}
         public virtual List<Student> students { get; set; } = new List<Student>();
+                
         public virtual List<Faculty> Faculties { get; set; } = new List<Faculty>();
     }
+
+      
+    }
     
-}
+ 
