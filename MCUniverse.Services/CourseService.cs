@@ -24,12 +24,12 @@ namespace MCUniverse.Services
             var course = new CourseEntity()
             {
                 Name = newCourse.Name,
-                StartTime = newCourse.startTime,
-                EndTime = newCourse.endTime,
-                ClassDays = newCourse.classDays,
+                StartTime = newCourse.StartTime,
+                EndTime = newCourse.EndTime,
+                ClassDays = newCourse.ClassDays,
                 Credits = newCourse.Credits,
                 Building = newCourse.Building,
-                RoomNumber = newCourse.roomNumber
+                RoomNumber = newCourse.RoomNumber
             };
             _context.Courses.Add(course);
             var numChanges = await _context.SaveChangesAsync();
@@ -42,12 +42,12 @@ namespace MCUniverse.Services
                 .Select(entity => new CourseDetail
                 {
                     Name = entity.Name,
-                    startTime = entity.StartTime,
-                    endTime = entity.EndTime,
-                    classDays = entity.ClassDays,
+                    StartTime = entity.StartTime,
+                    EndTime = entity.EndTime,
+                    ClassDays = entity.ClassDays,
                     Credits = entity.Credits,
                     Building = entity.Building,
-                    roomNumber = entity.RoomNumber
+                    RoomNumber = entity.RoomNumber
                 }).ToListAsync();
             return courses;
         }
@@ -60,12 +60,12 @@ namespace MCUniverse.Services
             return course is null ? null : new CourseDetail
             {
                 Name = course.Name,
-                startTime = course.StartTime,
-                endTime = course.EndTime,
-                classDays = course.ClassDays,
+                StartTime = course.StartTime,
+                EndTime = course.EndTime,
+                ClassDays = course.ClassDays,
                 Credits = course.Credits,
                 Building = course.Building,
-                roomNumber = course.RoomNumber
+                RoomNumber = course.RoomNumber
             };
         }
 
