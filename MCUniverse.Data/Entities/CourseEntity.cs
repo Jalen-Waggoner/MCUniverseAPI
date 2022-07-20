@@ -10,11 +10,8 @@ namespace MCUniverse.Data.Entities
     public class CourseEntity
     {
         [Key]
-        public int id { get; set; }
-        [Required]
-        [ForeignKey(nameof(Faculty))]
-        public int Faculty_id {get; set;}
-        public FacultyEntity Faculty { get; set; }
+        public int Id { get; set; }
+          
         [Required]
         public string Name {get; set;} = null!;
         [Required]
@@ -30,5 +27,11 @@ namespace MCUniverse.Data.Entities
         [Required]
         public int roomNumber {get; set;}
         public virtual List<Student> students { get; set; } = new List<Student>();
+                
+        public virtual List<Faculty> Faculties { get; set; } = new List<Faculty>();
     }
-}
+
+      
+    }
+    
+ 
