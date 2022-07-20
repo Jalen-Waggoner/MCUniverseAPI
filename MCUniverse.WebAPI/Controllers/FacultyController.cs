@@ -23,18 +23,40 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Faculty
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FacultyEntity>>> GetFacultyEntity()
+        public async Task<ActionResult<IEnumerable<Faculty>>> GetFacultyEntity()
         {
-          if (_context.Faculties == null)
-          {
-              return NotFound();
-          }
+            if (_context.Faculties == null)
+            {
+                return NotFound();
+            }
             return await _context.Faculties.ToListAsync();
         }
 
+        // Get: api/GetCoursesByFacultyId
+        [HttpGet("{id}/Courses")]
+
+        public async Task<ActionResult<CourseEntity>> GetCoursesByFacultyId(int id)
+        {
+
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            
+            var courses = await _context.Courses.Select( c => c.Faculty_id == id).ToListAsync();
+
+            if (courses == null)
+            {
+                return NotFound();
+            }
+
+
+            return courses;
+        }
+        
         // GET: api/Faculty/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FacultyEntity>> GetFacultyEntity(int id)
+        public async Task<ActionResult<Faculty>> GetFacultyEntity(int id)
         {
           if (_context.Faculties == null)
           {
@@ -53,7 +75,7 @@ namespace MCUniverse.WebAPI.Controllers
         // PUT: api/Faculty/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFacultyEntity(int id, FacultyEntity facultyEntity)
+        public async Task<IActionResult> PutFacultyEntity(int id, Faculty facultyEntity)
         {
             if (id != facultyEntity.Id)
             {
@@ -84,7 +106,7 @@ namespace MCUniverse.WebAPI.Controllers
         // POST: api/Faculty
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<FacultyEntity>> PostFacultyEntity(FacultyEntity facultyEntity)
+        public async Task<ActionResult<Faculty>> PostFacultyEntity(Faculty facultyEntity)
         {
           if (_context.Faculties == null)
           {

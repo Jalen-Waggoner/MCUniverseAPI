@@ -10,16 +10,16 @@ namespace MCUniverse.Data.Entities
     public class CourseEntity
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
         [Required]
         [ForeignKey("Faculty")]
-        public int faculty_id {get; set;}
+        public int Faculty_id {get; set;}
         [Required]
         public string Name {get; set;} = null!;
         [Required]
-        public TimeOnly startTime {get; set;}
+        public int StartTime {get; set;}
         [Required]
-        public TimeOnly endTime {get; set;}
+        public int EndTime {get; set;}
         [Required]
         public DayOfWeek ClassDay {get; set;}
         [Required]
@@ -28,6 +28,6 @@ namespace MCUniverse.Data.Entities
         public string Building {get; set;} = null!;
         [Required]
         public int RoomNumber {get; set;}
+        public List<Student> Students { get; set; } = new List<Student>();
     }
-    public List<StudentEntity> Students { get; set; } = new List<StudentEntity>;
 }
