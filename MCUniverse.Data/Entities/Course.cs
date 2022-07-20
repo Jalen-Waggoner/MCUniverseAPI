@@ -10,11 +10,11 @@ namespace MCUniverse.Data.Entities
     public class CourseEntity
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
         [Required]
         [ForeignKey(nameof(Faculty))]
         public int Faculty_id {get; set;}
-        public FacultyEntity Faculty { get; set; }
+        public Faculty Faculty { get; set; }
         [Required]
         public string Name {get; set;} = null!;
         [Required]

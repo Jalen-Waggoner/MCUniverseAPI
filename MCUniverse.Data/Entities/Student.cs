@@ -20,7 +20,8 @@ namespace MCUniverse.Data.Entities
         [EmailAddress]
         public string Email { get; set; } = null!;
         [Required]
-        public int PhoneNumber { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
         [Required]
         public string OriginCountry { get; set; } = null!;
 

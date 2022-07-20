@@ -3,6 +3,7 @@ using MCUniverse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCUniverse.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220719051700_Student")]
+    partial class Student
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,32 +25,38 @@ namespace MCUniverse.Data.Migrations
 
             modelBuilder.Entity("CourseEntityStudent", b =>
                 {
-                    b.Property<int>("Coursesid")
+                    b.Property<int>("CoursesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("studentsId")
+                    b.Property<int>("StudentsId")
                         .HasColumnType("int");
 
-                    b.HasKey("Coursesid", "studentsId");
+                    b.HasKey("CoursesId", "StudentsId");
 
-                    b.HasIndex("studentsId");
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("CourseEntityStudent");
                 });
 
             modelBuilder.Entity("MCUniverse.Data.Entities.CourseEntity", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Building")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ClassDay")
+                        .HasColumnType("int");
+
                     b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndTime")
                         .HasColumnType("int");
 
                     b.Property<int>("Faculty_id")
@@ -58,29 +66,18 @@ namespace MCUniverse.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("classDays")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("endTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("roomNumber")
+                    b.Property<int>("RoomNumber")
                         .HasColumnType("int");
 
-                    b.Property<string>("startTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StartTime")
+                        .HasColumnType("int");
 
-                    b.HasKey("id");
-
-                    b.HasIndex("Faculty_id");
+                    b.HasKey("Id");
 
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("MCUniverse.Data.Entities.FacultyEntity", b =>
+            modelBuilder.Entity("MCUniverse.Data.Entities.Faculty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,8 +137,9 @@ namespace MCUniverse.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -152,26 +150,15 @@ namespace MCUniverse.Data.Migrations
                 {
                     b.HasOne("MCUniverse.Data.Entities.CourseEntity", null)
                         .WithMany()
-                        .HasForeignKey("Coursesid")
+                        .HasForeignKey("CoursesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MCUniverse.Data.Entities.Student", null)
                         .WithMany()
-                        .HasForeignKey("studentsId")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MCUniverse.Data.Entities.CourseEntity", b =>
-                {
-                    b.HasOne("MCUniverse.Data.Entities.FacultyEntity", "Faculty")
-                        .WithMany()
-                        .HasForeignKey("Faculty_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
                 });
 #pragma warning restore 612, 618
         }
