@@ -9,9 +9,9 @@ namespace MCUniverse.Models
     public class CourseDetail
     {
         public string Name { get; set; } = null!;
-        public string startTime { get; set; }
-        public string endTime { get; set; }
-        public string classDays { get; set; }
+        public string startTime { get; set; } = null!;
+        public string endTime { get; set; } = null!;
+        public string classDays { get; set; } = null!;
         public int Credits { get; set; }
         public string Building { get; set; } = null!;
         public int roomNumber { get; set; }

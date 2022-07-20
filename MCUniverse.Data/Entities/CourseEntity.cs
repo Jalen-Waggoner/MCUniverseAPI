@@ -11,27 +11,31 @@ namespace MCUniverse.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-          
         [Required]
         public string Name {get; set;} = null!;
         [Required]
-        public string startTime {get; set;}
+        public string StartTime {get; set;}
         [Required]
-        public string endTime {get; set;}
+        public string EndTime {get; set;}
         [Required]
-        public string classDays {get; set;}
+        public string ClassDays {get; set;}
         [Required]
         public int Credits {get; set;}
         [Required]
+        public Season Semester { get; set;}
+        [Required]
         public string Building {get; set;} = null!;
         [Required]
-        public int roomNumber {get; set;}
+        public int RoomNumber {get; set;}
         public virtual List<Student> students { get; set; } = new List<Student>();
-                
-        public virtual List<Faculty> Faculties { get; set; } = new List<Faculty>();
-    }
-
-      
+        public virtual List<Faculty> faculties { get; set; } = new List<Faculty>();
     }
     
- 
+    public enum Season
+    {
+        Fall,
+        Spring,
+        Summer
+    }
+}
+

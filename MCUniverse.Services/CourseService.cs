@@ -7,6 +7,7 @@ using MCUniverse.Data;
 using MCUniverse.Models;
 using MCUniverse.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Web.Mvc;
 
 namespace MCUniverse.Services
 {
@@ -23,6 +24,7 @@ namespace MCUniverse.Services
             var course = new CourseEntity()
             {
                 Name = newCourse.Name,
+                Faculty_id = newCourse.Faculty_id,
                 startTime = newCourse.startTime,
                 endTime = newCourse.endTime,
                 classDays = newCourse.classDays,
@@ -51,7 +53,7 @@ namespace MCUniverse.Services
             return courses;
         }
 
-        public async Task<CourseDetail> ShowCoursebyId(int id)
+        public async Task<CourseDetail?> ShowCoursebyId(int id)
         {
             var course = await _context.Courses
                 .FirstOrDefaultAsync(e =>
@@ -67,5 +69,21 @@ namespace MCUniverse.Services
                 roomNumber = course.roomNumber
             };
         }
+
+        public ActionResult Index()
+        {
+            var query = (from faculty in _context.Faculties
+                         join course in _context.Courses on faculty.Id equals course.Faculty_id
+                         select new
+                         {
+                             Professor = faculty.Name
+                         });
+            return Professor;
+        }
+
+    };
+
+}
+
     }
 }
