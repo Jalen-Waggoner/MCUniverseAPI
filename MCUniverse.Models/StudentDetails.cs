@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Models
 {
-    public class CreateStudent
+    public class StudentDetails
     {
         public int Id { get; set; }
         [Required]
@@ -15,13 +15,19 @@ namespace MCUniverse.Models
         [Required]
         public string Gender { get; set; }
         [Required]
+        private DateTime DateOfBirth { get; set; }
+
+        [Required]
         public string Address { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        public int PhoneNumber { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
         [Required]
         public string OriginCountry { get; set; }
+        [Required]
+        public DateTime DateCreated { get; set; }
     }
 }
