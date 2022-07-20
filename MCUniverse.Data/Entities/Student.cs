@@ -10,6 +10,13 @@ namespace MCUniverse.Data.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        private DateTime DateOfBirth { get; set; }           
         [Required]
         public string FullName { get; set; } = null!;
         [Required]
@@ -20,11 +27,16 @@ namespace MCUniverse.Data.Entities
         [EmailAddress]
         public string Email { get; set; } = null!;
         [Required]
-        public int PhoneNumber { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
         [Required]
         public string OriginCountry { get; set; } = null!;
+        [Required]
+        public DateTime DateCreated { get; set; }
+        
+        public virtual List<CourseEntity> courses { get; set; } = new List<CourseEntity>();
 
-        public virtual List<CourseEntity> Courses { get; set; } = new List<CourseEntity>();
+       }
+
     }
     
-}
