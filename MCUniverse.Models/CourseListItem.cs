@@ -13,20 +13,7 @@ namespace MCUniverse.Models
         public string Name { get; set; } = null!;
         public int Credits { get; set; }
 
-        public virtual List<FacultyEntity> Facutly { get; set; } = new List<FacultyEntity>();
-
-        public string FacName
-        {
-            get
-            {
-
-                foreach (Rating rating in Ratings)
-                {
-                    total += rating.Score;
-                }
-                return total / Ratings.Count;
-            }
-        }
+        
 
         
     }

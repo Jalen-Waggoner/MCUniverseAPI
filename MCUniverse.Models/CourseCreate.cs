@@ -12,18 +12,16 @@ namespace MCUniverse.Models
         [Required]
         public string Name { get; set; } = null!;
         [Required]
-        public int Faculty_id { get; set; }
+        public string StartTime { get; set; }
         [Required]
-        public string startTime { get; set; }
+        public string EndTime { get; set; }
         [Required]
-        public string endTime { get; set; }
-        [Required]
-        public string classDays { get; set; }
+        public string ClassDays { get; set; }
         [Required]
         public int Credits { get; set; }
         [Required]
         public string Building { get; set; } = null!;
         [Required]
-        public int roomNumber { get; set; }
+        public int RoomNumber { get; set; }
     }
 }

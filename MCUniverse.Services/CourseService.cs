@@ -24,13 +24,12 @@ namespace MCUniverse.Services
             var course = new CourseEntity()
             {
                 Name = newCourse.Name,
-                Faculty_id = newCourse.Faculty_id,
-                startTime = newCourse.startTime,
-                endTime = newCourse.endTime,
-                classDays = newCourse.classDays,
+                StartTime = newCourse.startTime,
+                EndTime = newCourse.endTime,
+                ClassDays = newCourse.classDays,
                 Credits = newCourse.Credits,
                 Building = newCourse.Building,
-                roomNumber = newCourse.roomNumber
+                RoomNumber = newCourse.roomNumber
             };
             _context.Courses.Add(course);
             var numChanges = await _context.SaveChangesAsync();
@@ -43,12 +42,12 @@ namespace MCUniverse.Services
                 .Select(entity => new CourseDetail
                 {
                     Name = entity.Name,
-                    startTime = entity.startTime,
-                    endTime = entity.endTime,
-                    classDays = entity.classDays,
+                    startTime = entity.StartTime,
+                    endTime = entity.EndTime,
+                    classDays = entity.ClassDays,
                     Credits = entity.Credits,
                     Building = entity.Building,
-                    roomNumber = entity.roomNumber
+                    roomNumber = entity.RoomNumber
                 }).ToListAsync();
             return courses;
         }
@@ -57,33 +56,19 @@ namespace MCUniverse.Services
         {
             var course = await _context.Courses
                 .FirstOrDefaultAsync(e =>
-                e.id == id);
+                e.Id == id);
             return course is null ? null : new CourseDetail
             {
                 Name = course.Name,
-                startTime = course.startTime,
-                endTime = course.endTime,
-                classDays = course.classDays,
+                startTime = course.StartTime,
+                endTime = course.EndTime,
+                classDays = course.ClassDays,
                 Credits = course.Credits,
                 Building = course.Building,
-                roomNumber = course.roomNumber
+                roomNumber = course.RoomNumber
             };
-        }
-
-        public ActionResult Index()
-        {
-            var query = (from faculty in _context.Faculties
-                         join course in _context.Courses on faculty.Id equals course.Faculty_id
-                         select new
-                         {
-                             Professor = faculty.Name
-                         });
-            return Professor;
         }
 
     };
 
-}
-
-    }
 }
