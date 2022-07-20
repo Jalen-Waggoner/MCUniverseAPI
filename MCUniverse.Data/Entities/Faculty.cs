@@ -11,6 +11,10 @@ namespace MCUniverse.Data.Entities
     {
         public int Id { get; set; }
         [Required]
+        public string UserName { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
@@ -22,6 +26,7 @@ namespace MCUniverse.Data.Entities
         public string PhoneNumber { get; set; }
         [Required]
         public GenderEnum Gender { get; set; }
+        public virtual List<CourseEntity> Courses { get; set; } = new List<CourseEntity>();
     }
 
     public enum GenderEnum
