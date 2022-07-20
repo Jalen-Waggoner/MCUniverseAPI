@@ -12,6 +12,8 @@ namespace MCUniverse.Models
         [Required]
         public string Name { get; set; } = null!;
         [Required]
+        public int Faculty_id { get; set; }
+        [Required]
         public string startTime { get; set; }
         [Required]
         public string endTime { get; set; }

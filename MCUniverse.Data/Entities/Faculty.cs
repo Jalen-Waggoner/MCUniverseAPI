@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Data.Entities
 {
-    public class FacultyEntity
+    public class Faculty
     {
         public int Id { get; set; }
         [Required]
