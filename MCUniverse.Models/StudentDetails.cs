@@ -5,19 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCUniverse.Data.Entities
+namespace MCUniverse.Models
 {
-    public class Faculty
+    public class StudentDetails
     {
         public int Id { get; set; }
         [Required]
-        public string UserName { get; set; }
+        public string FullName { get; set; } 
         [Required]
-        public string Password { get; set; }
+        public string Gender { get; set; }
         [Required]
-        public string FirstName { get; set; }
+        private DateTime DateOfBirth { get; set; }
+
         [Required]
-        public string LastName { get; set; }
+        public string Address { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -25,14 +26,8 @@ namespace MCUniverse.Data.Entities
         [Phone]
         public string PhoneNumber { get; set; }
         [Required]
-        public GenderEnum Gender { get; set; }
-        public virtual List<CourseEntity> Courses { get; set; } = new List<CourseEntity>();
-    }
-
-    public enum GenderEnum
-    {
-        Male,
-        Female,
-        Other
+        public string OriginCountry { get; set; }
+        [Required]
+        public DateTime DateCreated { get; set; }
     }
 }

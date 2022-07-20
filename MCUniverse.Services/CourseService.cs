@@ -57,7 +57,7 @@ namespace MCUniverse.Services
         {
             var course = await _context.Courses
                 .FirstOrDefaultAsync(e =>
-                e.id == id);
+                e.Id == id);
             return course is null ? null : new CourseDetail
             {
                 Name = course.Name,
