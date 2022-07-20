@@ -35,24 +35,24 @@ namespace MCUniverse.WebAPI.Controllers
         // Get: api/GetCoursesByFacultyId
         [HttpGet("{id}/Courses")]
 
-        public async Task<ActionResult<CourseEntity>> GetCoursesByFacultyId(int id)
-        {
+        //public async Task<ActionResult<CourseEntity>> GetCoursesByFacultyId(int id)
+        //{
 
-            if (id == 0)
-            {
-                return NotFound();
-            }
+        //    if (id == 0)
+        //    {
+        //        return NotFound();
+        //    }
             
-            var courses = await _context.Courses.Select( c => c.Faculty_id == id).ToListAsync();
+        //    var courses = await _context.Courses.Select( c => c.Faculty_id == id).ToListAsync();
 
-            if (courses == null)
-            {
-                return NotFound();
-            }
+        //    if (courses == null)
+        //    {
+        //        return NotFound();
+        //    }
 
 
-            return courses;
-        }
+        //    return courses;
+        //}
         
         // GET: api/Faculty/5
         [HttpGet("{id}")]
