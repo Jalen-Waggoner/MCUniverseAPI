@@ -32,7 +32,7 @@ namespace MCUniverse.Data.Entities
         public string OriginCountry { get; set; } = null!;
         [Required]
         public DateTime DateCreated { get; set; }
-
+        
         public virtual List<CourseEntity> courses { get; set; } = new List<CourseEntity>();
 
        }
