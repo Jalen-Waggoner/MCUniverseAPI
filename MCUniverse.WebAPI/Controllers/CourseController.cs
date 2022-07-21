@@ -55,7 +55,7 @@ namespace MCUniverse.WebAPI.Controllers
         }*/
 
         //GET: api/Course/FacultyId/5
-       /* [HttpGet("~/api/course/FacultyId/{facultyId:int}")]
+       /*[HttpGet("~/api/course/FacultyId/{facultyId:int}")]
         public async Task<IActionResult> ShowCoursesByFacultyId(int facultyId)
         {
             var courses = await _cService.ShowAllCoursesByFacultyIdAsync(facultyId);
@@ -74,12 +74,12 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok("Course was successfully updated!")
                 : BadRequest("Course could not be updated");
         }
-
+*/
        // //private bool CourseEntityExists(int id)
        //{
        //     return (_context.Courses?.Any(e => e.id == id)).GetValueOrDefault();
-       // } 
-/*    }
+       // } /*
+/*  }
 
         // DELETE: api/Course/5
         [HttpDelete("{courseId:int}")]
@@ -89,4 +89,4 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
         }
-    }
+    }*/
