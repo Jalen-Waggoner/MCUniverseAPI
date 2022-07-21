@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCUniverse.Data;
-using MCUniverse.Models;
 using MCUniverse.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Web.Mvc;
+using MCUniverse.Models.Course;
 
 namespace MCUniverse.Services
 {
@@ -24,54 +23,92 @@ namespace MCUniverse.Services
             var course = new CourseEntity()
             {
                 Name = newCourse.Name,
-                StartTime = newCourse.startTime,
-                EndTime = newCourse.endTime,
-                ClassDays = newCourse.classDays,
+                FacultyId = newCourse.FacultyId,
+                StartTime = newCourse.StartTime,
+                EndTime = newCourse.EndTime,
+                ClassDays = newCourse.ClassDays,
                 Credits = newCourse.Credits,
+                Semester = newCourse.Semester,
                 Building = newCourse.Building,
-                RoomNumber = newCourse.roomNumber
+                RoomNumber = newCourse.RoomNumber
             };
             _context.Courses.Add(course);
             var numChanges = await _context.SaveChangesAsync();
             return numChanges == 1;
         }
 
-        public async Task<IEnumerable<CourseDetail>> ShowAllCourses()
+        public async Task<IEnumerable<CourseListItem>> ShowAllCourses()
         {
             var courses = await _context.Courses
-                .Select(entity => new CourseDetail
+                .Select(entity => new CourseListItem
                 {
+                    Id = entity.Id,
                     Name = entity.Name,
-                    startTime = entity.StartTime,
-                    endTime = entity.EndTime,
-                    classDays = entity.ClassDays,
                     Credits = entity.Credits,
-                    Building = entity.Building,
-                    roomNumber = entity.RoomNumber
+                    Semester = entity.Semester
                 }).ToListAsync();
             return courses;
         }
 
-        public async Task<CourseDetail?> ShowCoursebyId(int id)
+        public async Task<CourseDetail?> ShowCoursebyCourseIdAsync(int courseId)
         {
             var course = await _context.Courses
                 .FirstOrDefaultAsync(e =>
-                e.Id == id);
+                e.Id == courseId);
             return course is null ? null : new CourseDetail
             {
+                Id = course.Id,
                 Name = course.Name,
-                startTime = course.StartTime,
-                endTime = course.EndTime,
-                classDays = course.ClassDays,
+                StartTime = course.StartTime,
+                EndTime = course.EndTime,
+                ClassDays = course.ClassDays,
                 Credits = course.Credits,
+                Semester = course.Semester,
                 Building = course.Building,
-                roomNumber = course.RoomNumber
+                RoomNumber = course.RoomNumber
             };
         }
 
-    };
+        public async Task<IEnumerable<CourseListItem>> ShowAllCoursesByFacultyIdAsync(int facultyId)
+        {
+            var courses = await _context.Courses
+                .Where(entity => entity.FacultyId == facultyId)
+                .Select(entity => new CourseListItem
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Credits = entity.Credits,
+                    Semester = entity.Semester
+                }).ToListAsync();
+            return courses;
+        }
+        
+        public async Task<bool> UpdateCourseAsync(CourseUpdate adjCourse)
+        {
+            var course = await _context.Courses.FindAsync(adjCourse.Id);
+
+            if (course is null)
+            {
+                return false;
+            }
+            course.StartTime = adjCourse.StartTime;
+            course.EndTime = adjCourse.EndTime;
+            course.Building = adjCourse.Building;
+            course.RoomNumber = adjCourse.RoomNumber;
+
+            var numChanges = await _context.SaveChangesAsync();
+            return numChanges == 1;
+        }
+
+        public async Task<bool> DeleteCourseAsync(int courseId)
+        {
+            var course = await _context.Courses.FindAsync(courseId);
+            _context.Courses.Remove(course);
+            return await _context.SaveChangesAsync() == 1;
+        }
+
+
+    }
 
 }
-
-    
 
