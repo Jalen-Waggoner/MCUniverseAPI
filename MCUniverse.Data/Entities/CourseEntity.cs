@@ -12,6 +12,10 @@ namespace MCUniverse.Data.Entities
         [Key]
         public int Id { get; set; }
         [Required]
+        [ForeignKey(nameof(faculty))]
+        public int FacultyId { get; set; }
+        public Faculty faculty { get; set; }
+        [Required]
         public string Name {get; set;} = null!;
         [Required]
         public string StartTime {get; set;}
@@ -28,7 +32,6 @@ namespace MCUniverse.Data.Entities
         [Required]
         public int RoomNumber {get; set;}
         public virtual List<Student> students { get; set; } = new List<Student>();
-        public virtual List<Faculty> faculties { get; set; } = new List<Faculty>();
     }
     
     public enum Season

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MCUniverse.Data.Entities;
 using MCUniverse.Data;
-using MCUniverse.Models;
+using MCUniverse.Models.Course;
 using MCUniverse.Services;
 
 namespace MCUniverse.WebAPI.Controllers
@@ -22,8 +22,9 @@ namespace MCUniverse.WebAPI.Controllers
             _cService = cService;
         }
 
+        // POST: api/course
         [HttpPost]
-        public async Task<IActionResult> CreateCourse([FromBody] CourseCreate newCourse)
+        public async Task<IActionResult> CreateCourse([FromForm] CourseCreate newCourse)
         {
             if (!ModelState.IsValid)
             {
@@ -39,81 +40,53 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Course
         [HttpGet]
-        public async Task<IActionResult> GetCourseEntity()
+        public async Task<IActionResult> GetCourseEntities()
         {
             var courses = await _cService.ShowAllCourses();
             return Ok(courses);
         }
 
        // // GET: api/Course/5
-       [HttpGet("{id}")]
-       public async Task<IActionResult> ShowCourseById([FromRoute] int id)
+       [HttpGet("{courseId:int}")]
+       public async Task<IActionResult> ShowCourseByCourseId([FromRoute] int courseId)
         {
-            var course = await _cService.ShowCoursebyId(id);
+            var course = await _cService.ShowCoursebyCourseIdAsync(courseId);
             return Ok(course);
         }*/
 
-       
+        //GET: api/Course/FacultyId/5
+       /* [HttpGet("~/api/course/FacultyId/{facultyId:int}")]
+        public async Task<IActionResult> ShowCoursesByFacultyId(int facultyId)
+        {
+            var courses = await _cService.ShowAllCoursesByFacultyIdAsync(facultyId);
+            return Ok(courses);
+        }
 
-       // // PUT: api/Course/5
-       // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-       // [HttpPut("{id}")]
-       // public async Task<IActionResult> PutCourseEntity(int id, CourseEntity courseEntity)
-       // {
-       //     if (id != courseEntity.id)
-       //     {
-       //         return BadRequest();
-       //     }
-
-       //     _context.Entry(courseEntity).State = EntityState.Modified;
-
-       //     try
-       //     {
-       //         await _context.SaveChangesAsync();
-       //     }
-       //     catch (DbUpdateConcurrencyException)
-       //     {
-       //         if (!CourseEntityExists(id))
-       //         {
-       //             return NotFound();
-       //         }
-       //         else
-       //         {
-       //             throw;
-       //         }
-       //     }
-
-       //     return NoContent();
-       // }
-
-       // // POST: api/Course
-       // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        
-
-       // // DELETE: api/Course/5
-       // [HttpDelete("{id}")]
-       // //public async Task<IActionResult> DeleteCourseEntity(int id)
-       // //{
-       // //    if (_context.Courses == null)
-       // //    {
-       // //        return NotFound();
-       // //    }
-       // //    var courseEntity = await _context.Courses.FindAsync(id);
-       // //    if (courseEntity == null)
-       // //    {
-       // //        return NotFound();
-       // //    }
-
-       // //    _context.Courses.Remove(courseEntity);
-       // //    await _context.SaveChangesAsync();
-
-       // //    return NoContent();
-       // //}
+        // PUT: api/Course
+        [HttpPut]
+        public async Task<IActionResult> UpdateCourse([FromForm] CourseUpdate adjCourse)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return await _cService.UpdateCourseAsync(adjCourse)
+                ? Ok("Course was successfully updated!")
+                : BadRequest("Course could not be updated");
+        }
 
        // //private bool CourseEntityExists(int id)
        //{
        //     return (_context.Courses?.Any(e => e.id == id)).GetValueOrDefault();
        // } 
 /*    }
-}
-*/
+
+        // DELETE: api/Course/5
+        [HttpDelete("{courseId:int}")]
+        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        {
+            return await _cService.DeleteCourseAsync(courseId)
+                ? Ok("Course was successfully deleted")
+                : BadRequest("Course could not be deleted");
+        }
+    }
