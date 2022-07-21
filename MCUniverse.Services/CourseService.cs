@@ -1,3 +1,4 @@
+/*using System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,9 +107,6 @@ namespace MCUniverse.Services
             _context.Courses.Remove(course);
             return await _context.SaveChangesAsync() == 1;
         }
-
-
-    }
 
 }
 

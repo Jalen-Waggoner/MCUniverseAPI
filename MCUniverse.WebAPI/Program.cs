@@ -8,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var connectionString = builder.Configuration.GetConnectionString("FloriaConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IStudentService, StudentService>();
@@ -18,8 +20,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IFacultyService, FacultyService>();
-builder.Services.AddScoped<ICourseService, CourseService>();
+
+// builder.Services.AddScoped<ICourseService, CourseService>();
+
+//builder.Services.AddScoped<IFacultyService, FacultyService>();
+//builder.Services.AddScoped<ICourseService, CourseService>();
+
 
 var app = builder.Build();
 

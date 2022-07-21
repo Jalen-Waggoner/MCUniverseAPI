@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,10 +52,10 @@ namespace MCUniverse.WebAPI.Controllers
         {
             var course = await _cService.ShowCoursebyCourseIdAsync(courseId);
             return Ok(course);
-        }
+        }*/
 
         //GET: api/Course/FacultyId/5
-        [HttpGet("~/api/course/FacultyId/{facultyId:int}")]
+       /* [HttpGet("~/api/course/FacultyId/{facultyId:int}")]
         public async Task<IActionResult> ShowCoursesByFacultyId(int facultyId)
         {
             var courses = await _cService.ShowAllCoursesByFacultyIdAsync(facultyId);
@@ -75,6 +75,12 @@ namespace MCUniverse.WebAPI.Controllers
                 : BadRequest("Course could not be updated");
         }
 
+       // //private bool CourseEntityExists(int id)
+       //{
+       //     return (_context.Courses?.Any(e => e.id == id)).GetValueOrDefault();
+       // } 
+/*    }
+
         // DELETE: api/Course/5
         [HttpDelete("{courseId:int}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
@@ -84,4 +90,3 @@ namespace MCUniverse.WebAPI.Controllers
                 : BadRequest("Course could not be deleted");
         }
     }
-}
