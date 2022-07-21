@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,7 +51,7 @@ namespace MCUniverse.WebAPI.Controllers
         {
             var course = await _cService.ShowCoursebyId(id);
             return Ok(course);
-        }
+        }*/
 
        
 
@@ -114,5 +114,6 @@ namespace MCUniverse.WebAPI.Controllers
        //{
        //     return (_context.Courses?.Any(e => e.id == id)).GetValueOrDefault();
        // } 
-    }
+/*    }
 }
+*/

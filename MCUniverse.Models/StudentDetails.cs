@@ -10,24 +10,30 @@ namespace MCUniverse.Models
     public class StudentDetails
     {
         public int Id { get; set; }
-        [Required]
         public string FullName { get; set; } 
-        [Required]
         public string Gender { get; set; }
-        [Required]
-        private DateTime DateOfBirth { get; set; }
-
-        [Required]
+        public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
-        [Required]
-        [EmailAddress]
+/*        [EmailAddress]
         public string Email { get; set; }
-        [Required]
-        [Phone]
+
+        private string _password;
+        [MinLength(6)]
+        public string Password
+        {
+            get => _password;
+            set => _password = replaceEmptyWithNull(value);
+        }
+
+        private string _confirmPassword;
+        [Compare("Password")]
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set => _confirmPassword = replaceEmptyWithNull(value);
+        }*/
         public string PhoneNumber { get; set; }
-        [Required]
         public string OriginCountry { get; set; }
-        [Required]
         public DateTime DateCreated { get; set; }
     }
 }

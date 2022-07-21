@@ -10,13 +10,12 @@ namespace MCUniverse.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
-        private DateTime DateOfBirth { get; set; }           
+        public DateTime DateOfBirth { get; set; }           
         [Required]
         public string FullName { get; set; } = null!;
         [Required]

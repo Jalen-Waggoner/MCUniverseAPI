@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICourseService, CourseService>();
+// builder.Services.AddScoped<ICourseService, CourseService>();
 
 var app = builder.Build();
 

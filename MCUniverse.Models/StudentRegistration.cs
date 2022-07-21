@@ -10,18 +10,20 @@ namespace MCUniverse.Models
     public class StudentRegistration
     {
         [Required]
+        public int Id { get; set; }
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        [MinLength(4)]
+        [MinLength(6)]
         public string Username { get; set; }
 
         [Required]
-        [MinLength(4)]
+        [MinLength(7)]
         public string Password { get; set; }
-
-        [Compare(nameof(Password))]
-        public string ConfirmedPassword { get; set; }
+        [Required]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }
     }
 }

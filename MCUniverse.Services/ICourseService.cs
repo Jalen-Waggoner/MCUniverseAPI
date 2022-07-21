@@ -1,4 +1,4 @@
-﻿using MCUniverse.Models;
+﻿/*using MCUniverse.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,4 +13,4 @@ namespace MCUniverse.Services
         Task<IEnumerable<CourseDetail>> ShowAllCourses();
         Task<CourseDetail> ShowCoursebyId(int id);
     }
-}
+}*/
