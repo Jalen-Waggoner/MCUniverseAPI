@@ -35,8 +35,7 @@ namespace MCUniverse.Services
                 Gender = model.Gender,
                 PhoneNumber = model.PhoneNumber,
                 OriginCountry = model.OriginCountry,
-                LastModified = DateTime.Now,
-
+                LastModified = DateTime.Now
             };
 
             // password hasher
