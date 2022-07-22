@@ -1,4 +1,5 @@
-﻿using MCUniverse.Models;
+﻿using MCUniverse.Data.Entities;
+using MCUniverse.Models;
 using MCUniverse.Models.Course;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace MCUniverse.Services
         Task<CourseDetail> ShowCoursebyCourseIdAsync(int courseId);
         Task<IEnumerable<CourseListItem>> ShowAllCoursesByFacultyIdAsync(int facultyId);
         Task<IEnumerable<CourseListItem>> ShowAllCoursesByCreditsAsync(int credits);
+        Task<IEnumerable<CourseListItem>> ShowAllCoursesBySemesterAsync(Season semester);
         Task<bool> UpdateCourseAsync(CourseUpdate adjCourse);
         Task<bool> DeleteCourseAsync(int courseId);
     }

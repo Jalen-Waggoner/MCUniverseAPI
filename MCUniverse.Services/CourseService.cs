@@ -97,6 +97,20 @@ namespace MCUniverse.Services
             return courses;
         }
 
+        public async Task<IEnumerable<CourseListItem>> ShowAllCoursesBySemesterAsync(Season semester)
+        {
+            var courses = await _context.Courses
+                .Where(entity => entity.Semester == semester)
+                .Select(entity => new CourseListItem
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Credits = entity.Credits,
+                    Semester = entity.Semester
+                }).ToListAsync();
+            return courses;
+        }
+
             public async Task<bool> UpdateCourseAsync(CourseUpdate adjCourse)
         {
             var course = await _context.Courses.FindAsync(adjCourse.Id);
