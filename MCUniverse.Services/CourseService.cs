@@ -111,6 +111,28 @@ namespace MCUniverse.Services
             return courses;
         }
 
+        public async Task<IEnumerable<CourseDetail>> ShowAllCoursesByNameAsync(string name)
+        {
+
+            var courses = await _context.Courses
+                .Where(e => e.Name.ToLower() == name.ToLower())
+                .Select(e => new CourseDetail
+                {
+
+                    Id = e.Id,
+                    Name = e.Name,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    ClassDays = e.ClassDays,
+                    Credits = e.Credits,
+                    Semester = e.Semester,
+                    Building = e.Building,
+                    RoomNumber = e.RoomNumber
+                }).ToListAsync();
+            return courses;
+
+        }
+
             public async Task<bool> UpdateCourseAsync(CourseUpdate adjCourse)
         {
             var course = await _context.Courses.FindAsync(adjCourse.Id);
@@ -133,6 +155,11 @@ namespace MCUniverse.Services
             var course = await _context.Courses.FindAsync(courseId);
             _context.Courses.Remove(course);
             return await _context.SaveChangesAsync() == 1;
+        }
+
+        private async Task<CourseEntity> CheckName(string name)
+        {
+            return await _context.Courses.FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower());
         }
 
     }

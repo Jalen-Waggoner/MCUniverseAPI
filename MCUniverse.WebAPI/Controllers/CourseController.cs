@@ -78,6 +78,14 @@ namespace MCUniverse.WebAPI.Controllers
             return Ok(courses);
         }
 
+        //GET: api/Course/Name/"name"
+        [HttpGet("~/api/course/name/{name}")]
+        public async Task<IActionResult> ShowCoursesByName(string name)
+        {
+            var courses = await _cService.ShowAllCoursesByNameAsync(name);
+            return Ok(courses);
+        }
+
         // PUT: api/Course
         [HttpPut]
         public async Task<IActionResult> UpdateCourse([FromForm] CourseUpdate adjCourse)
