@@ -9,6 +9,9 @@ using MCUniverse.Data.Entities;
 using MCUniverse.Data;
 using MCUniverse.Models;
 using MCUniverse.Services;
+using Microsoft.AspNetCore.Authorization;
+using MCUniverse.Services.Token;
+using MCUniverse.Models.Token;
 
 namespace MCUniverse.WebAPI.Controllers
 {
@@ -17,9 +20,11 @@ namespace MCUniverse.WebAPI.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _service;
-        public StudentsController(IStudentService service)
+        private readonly ITokenService _tokenService;
+        public StudentsController(IStudentService service, ITokenService tokenService)
         {
             _service = service;
+            _tokenService = tokenService;
         }
 
         // GET: api/Student
@@ -35,18 +40,33 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudentById(int id)
+        public async Task<IActionResult> GetStudentById([FromRoute]int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var students = await _service.GetStudentByIdAsync(id);
             return Ok(students);
 
-         }   
-        
+        }
+
+        [HttpPost("~/api/TokenService")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+            {
+                if(!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+                return BadRequest("Invalid username or password.");
+
+            return Ok(tokenResponse);
+
+        }
+
+
         // PUT: api/Student/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutStudent(StudentUpdate Student)
+        public async Task<ActionResult> PutStudent([FromBody]StudentUpdate Student)
         {
            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -59,7 +79,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // POST: api/Student
         [HttpPost("Register")]
-        public async Task<ActionResult<Student>> RegisterStudent([FromBody] StudentRegistration model)
+        public async Task<IActionResult> RegisterStudent([FromBody] StudentRegistration model)
         {
             if (!ModelState.IsValid)
             {
@@ -77,145 +97,23 @@ namespace MCUniverse.WebAPI.Controllers
 
         // DELETE: api/Student/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudentById(int studentId)
+        public async Task<IActionResult> DeleteStudentById([FromBody]int studentId)
         {
         
             return await _service.DeleteStudentByIdAsync(studentId)
                 ? Ok($"Student {studentId} was deleted sucessfully.")
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
+/*
+       [Authorize]
+        [HttpGet("{studentId:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int studentId)
+        {
+            var student = await _service.GetStudentByIdAsync(studentId);
 
-
+            return Ok(student);
+        }*/
+        
      }
     }
-
-
-=======
-//namespace MCUniverse.WebAPI.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class StudentController : ControllerBase
-//    {
-//        private readonly IStudentService _service;
-//        public StudentController(IStudentService service)
-//        {
-//            _service = service;
-//        }
-
-//        // GET: api/Student
-//        [HttpGet]
-//        public async Task<ActionResult<IEnumerable<Student>>> GetStudent()
-//        {
-//          if (_service.Student == null)
-//          {
-//              return NotFound();
-//          }
-//            return await _service.Students.ToListAsync();
-//        }
-
-//        // GET: api/Studentss/5
-//        [HttpGet("{id}")]
-//        public async Task<ActionResult<Students>> GetStudent(int id)
-//        {
-//          if (_service.Student == null)
-//          {
-//              return NotFound();
-//          }
-//            var Student = await _service.Student.FindAsync(id);
-
-//            if (Student == null)
-//            {
-//                return NotFound();
-//            }
-
-//            return Student;
-//        }
-
-//        // PUT: api/Student/5
-//        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-//        [HttpPut("{id}")]
-//        public async Task<IActionResult> PutStudent(int id, Student Student)
-//        {
-//            if (id != Student.Id)
-//            {
-//                return BadRequest();
-//            }
-
-//            _service.Entry(Student).State = EntityState.Modified;
-
-//            try
-//            {
-//                await _service.SaveChangesAsync();
-//            }
-//            catch (DbUpdateConcurrencyException)
-//            {
-//                if (!StudentExists(id))
-//                {
-//                    return NotFound();
-//                }
-//                else
-//                {
-//                    throw;
-//                }
-//            }
-
-//            return NoContent();
-//        }
-
-//        // POST: api/Student
-//        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-//        [HttpPost]
-//        public async Task<ActionResult<Student>> RegisterStudent([FromBody]StudentRegistration model)
-//        {
-//            if(!ModelState.IsValid)
-//            {
-//                return BadRequest(ModelState);
-//            }
-
-//            var registerResult = await _service.RegisterStudentAsync(model);
-//            if(registerResult)
-//            {
-//                return Ok("Student was registered");
-//            }
-//            return BadRequest("Student could not be registered.");
-//        }
-
-
-//  /*        if (_service.Student == null)
-//          {
-//              return Problem("Entity set 'MCUniverseWebAPIContext.Student'  is null.");
-//          }
-//            _service.Student.Add(Student);
-//            await _service.SaveChangesAsync();
-
-//            return CreatedAtAction("GetStudent", new { id = Student.Id }, Student);
-//        }*/
-
-//        // DELETE: api/Student/5
-//        [HttpDelete("{id}")]
-//        public async Task<IActionResult> DeleteStudent(int id)
-//        {
-//            if (_service.Student == null)
-//            {
-//                return NotFound();
-//            }
-//            var Student = await _service.Student.FindAsync(id);
-//            if (Student == null)
-//            {
-//                return NotFound();
-//            }
-
-//            _service.Student.Remove(Student);
-//            await _service.SaveChangesAsync();
-
-//            return NoContent();
-//        }
-
-//        private bool StudentExists(int id)
-//        {
-//            return (_service.Student?.Any(e => e.Id == id)).GetValueOrDefault();
-//        }
-//    }
-//}
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MCUniverse.Services
@@ -28,15 +29,22 @@ namespace MCUniverse.Services
                 Email = model.Email,
                 Password = model.Password,
                 DateCreated = DateTime.Now,
+                Address = model.Address,
+                FullName = model.FullName,
+                DateOfBirth = DateTime.Now,
+                Gender = model.Gender,
+                PhoneNumber = model.PhoneNumber,
+                OriginCountry = model.OriginCountry,
+
             };
 
             // password hasher
-            // var passwordHasher = new PasswordHasher<Student>();
-            //student.Password = passwordHasher.HashPassword(student, model.Password);
+          /*   var passwordHasher = new PasswordHasher<Student>();
+             student.Password = passwordHasher.HashPassword(student, model.Password);*/
 
             _context.Students.Add(student);
             var numberOfChanges = await _context.SaveChangesAsync();
-            return numberOfChanges > 0;
+            return numberOfChanges == 1;
         }
 
         // change these methods
@@ -47,13 +55,27 @@ namespace MCUniverse.Services
         }
         public async Task<Student> GetStudentByUsernameAsync(string username)
         {
-            return await _context.Students.FirstOrDefaultAsync(student => student.Email.ToLower() == username.ToLower());
+            return await _context.Students.FirstOrDefaultAsync(student => student.Username.ToLower() == username.ToLower());
         }
 
 
-        public async Task<IEnumerable<Student>> GetAllStudentsAsync()
+        public async Task<IEnumerable<StudentDetails>> GetAllStudentsAsync()
         {
-            var students = await _context.Students.ToListAsync();
+            var students = await _context.Students 
+                .Select(Student => new StudentDetails
+            {
+                Id = Student.Id,
+                FullName = Student.FullName,
+                Gender = Student.Gender,
+                DateOfBirth = Student.DateOfBirth,
+                Address = Student.Address,
+                PhoneNumber = Student.PhoneNumber,
+                OriginCountry = Student.OriginCountry,
+                DateCreated = Student.DateCreated
+
+
+            }).ToListAsync();
+
             return students;
         }
 
@@ -94,7 +116,8 @@ namespace MCUniverse.Services
             Student.Address = model.Address;
             Student.PhoneNumber = model.PhoneNumber;
             Student.OriginCountry = model.OriginCountry;
-            Student.DateCreated = DateTime.Now;
+            Student.LastModified = model.LastModified;
+       
                         
             var numberOfChanges = await _context.SaveChangesAsync();
             return numberOfChanges > 0;
