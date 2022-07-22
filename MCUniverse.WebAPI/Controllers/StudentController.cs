@@ -21,15 +21,15 @@ namespace MCUniverse.WebAPI.Controllers
     {
         private readonly IStudentService _service;
         private readonly ITokenService _tokenService;
-        public StudentsController(IStudentService service)
+        public StudentsController(IStudentService service, ITokenService tokenService)
         {
             _service = service;
-            _tokenService = TokenService;
+            _tokenService = tokenService;
         }
 
         // GET: api/Student
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent([FromBody] StudentDetails model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -40,7 +40,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudentById(int id)
+        public async Task<ActionResult<Student>> GetStudentById([FromRoute]int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -64,12 +64,9 @@ namespace MCUniverse.WebAPI.Controllers
         }
 
 
-
-
-
         // PUT: api/Student/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutStudent(StudentUpdate Student)
+        public async Task<ActionResult> PutStudent([FromBody]StudentUpdate Student)
         {
            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -100,7 +97,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // DELETE: api/Student/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudentById(int studentId)
+        public async Task<IActionResult> DeleteStudentById([FromBody]int studentId)
         {
         
             return await _service.DeleteStudentByIdAsync(studentId)
@@ -113,8 +110,10 @@ namespace MCUniverse.WebAPI.Controllers
         public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
             var student = await _service.GetStudentByIdAsync(studentId);
-        }
 
+            return Ok(student);
+        }
+        
      }
     }
 

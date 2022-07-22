@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MCUniverse.Services
@@ -31,8 +32,8 @@ namespace MCUniverse.Services
             };
 
             // password hasher
-            // var passwordHasher = new PasswordHasher<Student>();
-            //student.Password = passwordHasher.HashPassword(student, model.Password);
+             var passwordHasher = new PasswordHasher<Student>();
+             student.Password = passwordHasher.HashPassword(student, model.Password);
 
             _context.Students.Add(student);
             var numberOfChanges = await _context.SaveChangesAsync();

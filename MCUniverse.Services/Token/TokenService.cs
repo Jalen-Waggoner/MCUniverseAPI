@@ -31,7 +31,7 @@ namespace MCUniverse.Services.Token
             if (student is null)
                 return null;
 
-            //return GenerateToken(student);
+            return await GenerateToken(student);
         }
 
         private async Task<Student> GetValidUserAsync(TokenRequest model)
@@ -50,7 +50,7 @@ namespace MCUniverse.Services.Token
 
         }
 
-       private TokenResponse GenerateToken(Student student)
+       private async Task<TokenResponse> GenerateToken(Student student)
         { 
             var claim = GetClaims(student);
 
@@ -60,10 +60,10 @@ namespace MCUniverse.Services.Token
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
+                Audience = _configuration["jwt:Audience"],
                 Subject = new ClaimsIdentity(claim),
                 IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(14),
                 SigningCredentials = credentials
             };
 

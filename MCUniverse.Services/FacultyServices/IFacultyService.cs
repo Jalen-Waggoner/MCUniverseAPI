@@ -1,4 +1,4 @@
-﻿using MCUniverse.Models.FacultyModels;
+﻿/*using MCUniverse.Models.FacultyModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,4 +15,4 @@ namespace MCUniverse.Services.FacultyServices
         Task<bool> UpdateFacultyAsync(FacultyUpdate facultyUpdate);
         Task<bool> DeleteFacultyAsync(int facultyId);
     }
-}
+}*/

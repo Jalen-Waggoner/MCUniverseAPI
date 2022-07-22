@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,8 +78,8 @@ namespace MCUniverse.WebAPI.Controllers
        // //private bool CourseEntityExists(int id)
        //{
        //     return (_context.Courses?.Any(e => e.id == id)).GetValueOrDefault();
-       // } /*
-/*  }
+       // } /*/*
+ /*}
 
         // DELETE: api/Course/5
         [HttpDelete("{courseId:int}")]
@@ -89,4 +89,4 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
         }
-    }
+    }*/

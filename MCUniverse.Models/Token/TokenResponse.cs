@@ -10,7 +10,7 @@ namespace MCUniverse.Models.Token
     {
         public string Token { get; set; }
         public DateTime IssuedAt { get; set; }
-        public string Expires { get; set; }
+        public DateTime Expires { get; set; }
 
     }
 }

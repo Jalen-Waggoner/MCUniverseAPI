@@ -1,4 +1,4 @@
-﻿using MCUniverse.Data;
+﻿/*using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models.FacultyModels;
 using Microsoft.EntityFrameworkCore;
@@ -121,4 +121,4 @@ public class FacultyService : IFacultyService
         return await _context.Faculties.FirstOrDefaultAsync(f => f.UserName.ToLower() == userName.ToLower());
     }
 }
-
+*/
