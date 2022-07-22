@@ -1,5 +1,6 @@
 ﻿using MCUniverse.Data;
 using MCUniverse.Data.Entities;
+using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -90,7 +91,7 @@ public class FacultyService : IFacultyService
         faculty.LastName = request.LastName;
         faculty.PhoneNumber = request.PhoneNumber;
         faculty.Gender = request.Gender;
-        
+
         var numberOfChanges = await _context.SaveChangesAsync();
 
         return numberOfChanges == 1;
@@ -110,6 +111,84 @@ public class FacultyService : IFacultyService
         return await _context.SaveChangesAsync() == 1;
     }
 
+
+
+    public async Task<IEnumerable<CourseListItem>> ListCoursesByFacultyIdAsync(int facultyId)
+    {
+        var courses = await _context.Courses.Where(c => c.FacultyId == facultyId)
+            .Select(c => new CourseListItem
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Credits = c.Credits,
+                Semester = c.Semester,
+            }).ToListAsync();
+
+        if (courses.Count == 0)
+            return null;
+
+        return courses;
+    }
+
+
+
+ 
+    public async Task<bool> AssignCourseToFacultyMemeberAsync(int courseId, int facultyId)
+    {
+        var course = await _context.Courses.FindAsync(courseId);
+
+        course.FacultyId = facultyId;
+
+        var numberOfChanges = await _context.SaveChangesAsync();
+
+        return numberOfChanges == 1;
+    }
+
+
+
+    public async Task<IEnumerable<FacultyDetail>> SearchFacultyByNameAsync(string search)
+    {
+        if (search == null)
+            return null;
+
+        search = search.ToLower();
+
+        var faculties = await _context.Faculties
+            .Where(f =>
+            f.FirstName.ToLower() == search.ToLower() ||
+            f.LastName.ToLower() == search.ToLower())
+            .Select(f => new FacultyDetail
+            {
+                Id = f.Id,
+                UserName = f.UserName,
+                Email = f.Email,
+                FirstName = f.FirstName,
+                LastName = f.LastName,
+                PhoneNumber = f.PhoneNumber,
+            }
+            ).ToListAsync();
+
+        if (faculties.Count == 0)
+            return null;
+
+        return faculties;
+    }
+
+
+
+    
+
+
+
+
+
+    //var faculty = await _context.Faculties.FindAsync(facultyId);
+    //if (faculty.Id == 0)
+    //    return false;
+
+    //var course = _context.Courses.FindAsync(courseId);
+
+    //_context.Faculties.Courses.Add(course);
 
     public async Task<Faculty> GetFacultyByEmailAsync(string email)
     {

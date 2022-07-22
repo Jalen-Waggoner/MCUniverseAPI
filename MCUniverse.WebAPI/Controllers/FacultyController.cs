@@ -83,5 +83,45 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok($"Facutly Memeber {facultyId} was deleted successfully.")
                 : BadRequest($"Faculty Memeber {facultyId} could not be deleted.");
         }
+
+
+        [HttpGet("{facultyId:int}/Courses")]
+        public async Task<IActionResult> ListCoursesByFacultyId(int facultyId)
+        {
+            if (!ModelState.IsValid)
+                return NotFound(ModelState);
+            var courses = await _service.ListCoursesByFacultyIdAsync(facultyId);
+
+            if (courses == null)
+                return BadRequest();
+
+            return Ok(courses);
+        }
+        
+        
+        
+        [HttpPut("AssignCourse")]
+        public async Task<IActionResult> AssignCourseToFacultyMemeber(int courseId, int facultyId)
+        {
+            if (!ModelState.IsValid)
+                return NotFound(ModelState);
+
+            var courses = await _service.AssignCourseToFacultyMemeberAsync(courseId, facultyId);
+
+            return Ok("Faculty Member has been changed.");
+        }
+  
+
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchFacultyByName(string search)
+        {
+            var faculty = await _service.SearchFacultyByNameAsync(search);
+
+            if (faculty == null)
+                return NotFound();
+
+            return Ok(faculty);
+        }
     }
 }
