@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -89,4 +89,4 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
         }
-    }*/
+    }

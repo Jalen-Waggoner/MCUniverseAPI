@@ -9,6 +9,9 @@ using MCUniverse.Data.Entities;
 using MCUniverse.Data;
 using MCUniverse.Models;
 using MCUniverse.Services;
+using Microsoft.AspNetCore.Authorization;
+using MCUniverse.Services.Token;
+using MCUniverse.Models.Token;
 
 namespace MCUniverse.WebAPI.Controllers
 {
@@ -17,9 +20,11 @@ namespace MCUniverse.WebAPI.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _service;
+        private readonly ITokenService _tokenService;
         public StudentsController(IStudentService service)
         {
             _service = service;
+            _tokenService = TokenService;
         }
 
         // GET: api/Student
@@ -42,8 +47,26 @@ namespace MCUniverse.WebAPI.Controllers
             var students = await _service.GetStudentByIdAsync(id);
             return Ok(students);
 
-         }   
-        
+        }
+
+        [HttpPost("~/api/TokenService")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+            {
+                if(!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+                return BadRequest("Invalid username or password.");
+
+            return Ok(tokenResponse);
+
+        }
+
+
+
+
+
         // PUT: api/Student/5
         [HttpPut("{id}")]
         public async Task<ActionResult> PutStudent(StudentUpdate Student)
@@ -85,6 +108,12 @@ namespace MCUniverse.WebAPI.Controllers
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
 
+       [Authorize]
+        [HttpGet("{studentId:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int studentId)
+        {
+            var student = await _service.GetStudentByIdAsync(studentId);
+        }
 
      }
     }
