@@ -29,7 +29,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Student
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent([FromBody] StudentDetails model)
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -40,7 +40,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetStudentById([FromRoute]int id)
+        public async Task<IActionResult> GetStudentById([FromRoute]int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -79,7 +79,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // POST: api/Student
         [HttpPost("Register")]
-        public async Task<ActionResult<Student>> RegisterStudent([FromBody] StudentRegistration model)
+        public async Task<IActionResult> RegisterStudent([FromBody] StudentRegistration model)
         {
             if (!ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok($"Student {studentId} was deleted sucessfully.")
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
-
+/*
        [Authorize]
         [HttpGet("{studentId:int}")]
         public async Task<IActionResult> GetById([FromRoute] int studentId)
@@ -112,7 +112,7 @@ namespace MCUniverse.WebAPI.Controllers
             var student = await _service.GetStudentByIdAsync(studentId);
 
             return Ok(student);
-        }
+        }*/
         
      }
     }

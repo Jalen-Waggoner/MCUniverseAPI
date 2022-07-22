@@ -83,8 +83,58 @@ namespace MCUniverse.Services
                 }).ToListAsync();
             return courses;
         }
-        
-        public async Task<bool> UpdateCourseAsync(CourseUpdate adjCourse)
+
+        public async Task<IEnumerable<CourseListItem>> ShowAllCoursesByCreditsAsync(int credits)
+        {
+            var courses = await _context.Courses
+                .Where(entity => entity.Credits == credits)
+                .Select(entity => new CourseListItem
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Credits = entity.Credits,
+                    Semester = entity.Semester
+                }).ToListAsync();
+            return courses;
+        }
+
+        public async Task<IEnumerable<CourseListItem>> ShowAllCoursesBySemesterAsync(Season semester)
+        {
+            var courses = await _context.Courses
+                .Where(entity => entity.Semester == semester)
+                .Select(entity => new CourseListItem
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    Credits = entity.Credits,
+                    Semester = entity.Semester
+                }).ToListAsync();
+            return courses;
+        }
+
+        public async Task<IEnumerable<CourseDetail>> ShowAllCoursesByNameAsync(string name)
+        {
+
+            var courses = await _context.Courses
+                .Where(e => e.Name.ToLower() == name.ToLower())
+                .Select(e => new CourseDetail
+                {
+
+                    Id = e.Id,
+                    Name = e.Name,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    ClassDays = e.ClassDays,
+                    Credits = e.Credits,
+                    Semester = e.Semester,
+                    Building = e.Building,
+                    RoomNumber = e.RoomNumber
+                }).ToListAsync();
+            return courses;
+
+        }
+
+            public async Task<bool> UpdateCourseAsync(CourseUpdate adjCourse)
         {
             var course = await _context.Courses.FindAsync(adjCourse.Id);
 
@@ -108,5 +158,13 @@ namespace MCUniverse.Services
             return await _context.SaveChangesAsync() == 1;
         }
 
-}
-*/
+     *//*   public async Task<> Enroll(int studentId, int courseToStart, int courseToStop)
+        {
+            Student student = await _context.Students
+                .Include(student => student.courses)
+                .Where(student => student.Id == studentId)
+                .FirstOrDefaultAsync();
+        }*//*
+
+    }
+}*/
