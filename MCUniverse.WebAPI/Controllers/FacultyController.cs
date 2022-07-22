@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MCUniverse.Data.Entities;
 using MCUniverse.Data;
+using MCUniverse.Services.FacultyServices;
+using MCUniverse.Models.FacultyModels;
 
 namespace MCUniverse.WebAPI.Controllers
 {
@@ -16,131 +18,70 @@ namespace MCUniverse.WebAPI.Controllers
     {
         private readonly AppDbContext _context;
 
-        public FacultyController(AppDbContext context)
+        private readonly IFacultyService _service;
+
+        public FacultyController(IFacultyService service)
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/Faculty
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Faculty>>> GetFacultyEntity()
-        {
-            if (_context.Faculties == null)
-            {
-                return NotFound();
-            }
-            return await _context.Faculties.ToListAsync();
-        }
 
-        // Get: api/GetCoursesByFacultyId
-        [HttpGet("{id}/Courses")]
-
-        //public async Task<ActionResult<CourseEntity>> GetCoursesByFacultyId(int id)
-        //{
-
-        //    if (id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-            
-        //    var courses = await _context.Courses.Select( c => c.Faculty_id == id).ToListAsync();
-
-        //    if (courses == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-
-        //    return courses;
-        //}
-        
-        // GET: api/Faculty/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Faculty>> GetFacultyEntity(int id)
-        {
-          if (_context.Faculties == null)
-          {
-              return NotFound();
-          }
-            var facultyEntity = await _context.Faculties.FindAsync(id);
-
-            if (facultyEntity == null)
-            {
-                return NotFound();
-            }
-
-            return facultyEntity;
-        }
-
-        // PUT: api/Faculty/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFacultyEntity(int id, Faculty facultyEntity)
-        {
-            if (id != facultyEntity.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(facultyEntity).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FacultyEntityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Faculty
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Faculty>> PostFacultyEntity(Faculty facultyEntity)
+        public async Task<IActionResult> RegisterFaculty([FromBody]FacultyCreate faculty)
         {
-          if (_context.Faculties == null)
-          {
-              return Problem("Entity set 'MCUniverseWebAPIContext.FacultyEntity'  is null.");
-          }
-            _context.Faculties.Add(facultyEntity);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetFacultyEntity", new { id = facultyEntity.Id }, facultyEntity);
+            var registerResult = await _service.RegisterFacultyAysnc(faculty);
+                if (registerResult)
+                    return Ok("Faculty Memeber was created.");
+
+            return BadRequest("Faculty Member was not created. Check entered information");
         }
 
-        // DELETE: api/Faculty/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFacultyEntity(int id)
+
+
+        [HttpGet("{facultyId:int}")]
+        public async Task<IActionResult> GetFacultyById([FromRoute] int facultyId)
         {
-            if (_context.Faculties == null)
-            {
-                return NotFound();
-            }
-            var facultyEntity = await _context.Faculties.FindAsync(id);
-            if (facultyEntity == null)
-            {
-                return NotFound();
-            }
+            var facultyDetail = await _service.GetFacultyByIdAsync(facultyId);
 
-            _context.Faculties.Remove(facultyEntity);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            if (facultyDetail == null)
+                return NotFound();
+            
+            return Ok(facultyDetail);
         }
 
-        private bool FacultyEntityExists(int id)
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllFaculty()
         {
-            return (_context.Faculties?.Any(e => e.Id == id)).GetValueOrDefault();
+            var facultyListItem = await _service.GetAllFacultyAsync();
+
+            if (facultyListItem == null)
+                return NotFound();
+
+            return Ok(facultyListItem);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateFacultyById([FromBody] FacultyUpdate request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _service.UpdateFacultyAsync(request)
+                ? Ok("Faculty Member has been updated.")
+                : BadRequest("Faculty Member could not be updated.");
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteFacultyById(int facultyId)
+        {
+            return await _service.DeleteFacultyAsync(facultyId)
+                ? Ok($"Facutly Memeber {facultyId} was deleted successfully.")
+                : BadRequest($"Faculty Memeber {facultyId} could not be deleted.");
         }
     }
 }
