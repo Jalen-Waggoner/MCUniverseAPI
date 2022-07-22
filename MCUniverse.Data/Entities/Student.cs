@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using MCUniverse.Data.Entities;
+
 
 namespace MCUniverse.Data.Entities
 {
@@ -10,13 +12,12 @@ namespace MCUniverse.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
-        private DateTime DateOfBirth { get; set; }           
+        public DateTime DateOfBirth { get; set; }           
         [Required]
         public string FullName { get; set; } = null!;
         [Required]
@@ -33,6 +34,8 @@ namespace MCUniverse.Data.Entities
         public string OriginCountry { get; set; } = null!;
         [Required]
         public DateTime DateCreated { get; set; }
+        [Required]
+        public DateTime LastModified { get; set; }
         
         public virtual List<CourseEntity> courses { get; set; } = new List<CourseEntity>();
 

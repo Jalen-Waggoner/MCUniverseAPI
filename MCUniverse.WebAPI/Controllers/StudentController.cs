@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,91 +9,85 @@ using MCUniverse.Data.Entities;
 using MCUniverse.Data;
 using MCUniverse.Models;
 using MCUniverse.Services;
+using Microsoft.AspNetCore.Authorization;
+using MCUniverse.Services.Token;
+using MCUniverse.Models.Token;
 
 namespace MCUniverse.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentsController : ControllerBase
     {
         private readonly IStudentService _service;
-        public StudentController(IStudentService service)
+        private readonly ITokenService _tokenService;
+        public StudentsController(IStudentService service, ITokenService tokenService)
         {
             _service = service;
+            _tokenService = tokenService;
         }
 
         // GET: api/Student
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudent()
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
         {
-          if (_service.Student == null)
-          {
-              return NotFound();
-          }
-            return await _service.Students.ToListAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var students = await _service.GetAllStudentsAsync();
+            return Ok(students);
         }
 
-        // GET: api/Studentss/5
+        // GET: api/Students/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Students>> GetStudent(int id)
+        public async Task<IActionResult> GetStudentById([FromRoute]int id)
         {
-          if (_service.Student == null)
-          {
-              return NotFound();
-          }
-            var Student = await _service.Student.FindAsync(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByIdAsync(id);
+            return Ok(students);
 
-            if (Student == null)
-            {
-                return NotFound();
-            }
-
-            return Student;
         }
+
+        [HttpPost("~/api/TokenService")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+            {
+                if(!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+                return BadRequest("Invalid username or password.");
+
+            return Ok(tokenResponse);
+
+        }
+
 
         // PUT: api/Student/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student Student)
+        public async Task<ActionResult> PutStudent([FromBody]StudentUpdate Student)
         {
-            if (id != Student.Id)
-            {
-                return BadRequest();
-            }
+           if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _service.Entry(Student).State = EntityState.Modified;
 
-            try
-            {
-                await _service.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return await _service.UpdateStudentByIdAsync(Student)
+                 ? Ok()
+                 : BadRequest(ModelState);
         }
 
         // POST: api/Student
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Student>> RegisterStudent([FromBody]StudentRegistration model)
+        [HttpPost("Register")]
+        public async Task<IActionResult> RegisterStudent([FromBody] StudentRegistration model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var registerResult = await _service.RegisterStudentAsync(model);
-            if(registerResult)
+            if (registerResult)
             {
                 return Ok("Student was registered");
             }
@@ -101,39 +95,25 @@ namespace MCUniverse.WebAPI.Controllers
         }
 
 
-  /*        if (_service.Student == null)
-          {
-              return Problem("Entity set 'MCUniverseWebAPIContext.Student'  is null.");
-          }
-            _service.Student.Add(Student);
-            await _service.SaveChangesAsync();
-
-            return CreatedAtAction("GetStudent", new { id = Student.Id }, Student);
-        }*/
-
         // DELETE: api/Student/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        public async Task<IActionResult> DeleteStudentById([FromBody]int studentId)
         {
-            if (_service.Student == null)
-            {
-                return NotFound();
-            }
-            var Student = await _service.Student.FindAsync(id);
-            if (Student == null)
-            {
-                return NotFound();
-            }
-
-            _service.Student.Remove(Student);
-            await _service.SaveChangesAsync();
-
-            return NoContent();
+        
+            return await _service.DeleteStudentByIdAsync(studentId)
+                ? Ok($"Student {studentId} was deleted sucessfully.")
+                : BadRequest($"Note{studentId} could not be deleted.");
         }
-
-        private bool StudentExists(int id)
+/*
+       [Authorize]
+        [HttpGet("{studentId:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
-            return (_service.Student?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+            var student = await _service.GetStudentByIdAsync(studentId);
+
+            return Ok(student);
+        }*/
+        
+     }
     }
-}
+
