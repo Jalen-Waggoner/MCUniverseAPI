@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCUniverse.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220720201037_CreateTables")]
-    partial class CreateTables
+    [Migration("20220722040657_CreatingTables")]
+    partial class CreatingTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

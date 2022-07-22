@@ -14,6 +14,7 @@ namespace MCUniverse.Services
         Task<IEnumerable<CourseListItem>> ShowAllCourses();
         Task<CourseDetail> ShowCoursebyCourseIdAsync(int courseId);
         Task<IEnumerable<CourseListItem>> ShowAllCoursesByFacultyIdAsync(int facultyId);
+        Task<IEnumerable<CourseListItem>> ShowAllCoursesByCreditsAsync(int credits);
         Task<bool> UpdateCourseAsync(CourseUpdate adjCourse);
         Task<bool> DeleteCourseAsync(int courseId);
     }

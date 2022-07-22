@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MCUniverse.Data.Migrations
 {
-    public partial class CreateTables : Migration
+    public partial class CreatingTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
