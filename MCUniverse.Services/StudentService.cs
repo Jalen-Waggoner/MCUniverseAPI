@@ -35,6 +35,7 @@ namespace MCUniverse.Services
                 Gender = model.Gender,
                 PhoneNumber = model.PhoneNumber,
                 OriginCountry = model.OriginCountry,
+                LastModified = DateTime.Now,
 
             };
 
@@ -72,6 +73,7 @@ namespace MCUniverse.Services
                 PhoneNumber = Student.PhoneNumber,
                 OriginCountry = Student.OriginCountry,
                 DateCreated = Student.DateCreated
+                
 
 
             }).ToListAsync();
@@ -93,7 +95,8 @@ namespace MCUniverse.Services
                 Address = student.Address,
                 PhoneNumber = student.PhoneNumber,
                 OriginCountry = student.OriginCountry,
-                DateCreated = student.DateCreated
+                DateCreated = student.DateCreated,
+                LastModified = student.LastModified
             };
             return studentDetails;
         }

@@ -35,5 +35,6 @@ namespace MCUniverse.Models
         public string PhoneNumber { get; set; }
         public string OriginCountry { get; set; }
         public DateTime DateCreated { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }
