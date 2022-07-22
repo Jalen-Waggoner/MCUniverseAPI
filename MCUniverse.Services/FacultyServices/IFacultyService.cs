@@ -1,5 +1,5 @@
 using MCUniverse.Models.FacultyModels;
-sing MCUniverse.Models.Course;
+using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
 
 using System;
