@@ -19,7 +19,7 @@ namespace MCUniverse.Data.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }           
         [Required]
-        public string FullName { get; set; } = null!;
+        public string FullName { get; set; }
         [Required]
         public string Gender { get; set; } = null!;
         [Required]

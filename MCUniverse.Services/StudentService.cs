@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models;
+using MCUniverse.Models.Course;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace MCUniverse.Services
 {
@@ -20,10 +23,8 @@ namespace MCUniverse.Services
         }
         public async Task<bool> RegisterStudentAsync(StudentRegistration model)
         {
-            if (await GetStudentByEmailAsync(model.Email) != null || await GetStudentByUsernameAsync(model.Username) != null)
-                return false;
-
-            var student = new Student
+            
+            var student = new Student()
             {
                 Username = model.Username,
                 Email = model.Email,
@@ -39,47 +40,82 @@ namespace MCUniverse.Services
             };
 
             // password hasher
-          /*   var passwordHasher = new PasswordHasher<Student>();
-             student.Password = passwordHasher.HashPassword(student, model.Password);*/
+            /*   var passwordHasher = new PasswordHasher<Student>();
+               student.Password = passwordHasher.HashPassword(student, model.Password);*/
 
             _context.Students.Add(student);
             var numberOfChanges = await _context.SaveChangesAsync();
             return numberOfChanges == 1;
         }
 
-        // change these methods
-        // helper method is for the Registration 
-        public async Task<Student> GetStudentByEmailAsync(string email)
+      
+        public async Task<StudentDetails> GetStudentByEmailAsync(string email)
         {
-            return await _context.Students.FirstOrDefaultAsync(student => student.Email.ToLower() == email.ToLower());
-        }
-        public async Task<Student> GetStudentByUsernameAsync(string username)
-        {
-            return await _context.Students.FirstOrDefaultAsync(student => student.Username.ToLower() == username.ToLower());
-        }
+            var student = await _context.Students
+            .FirstOrDefaultAsync(student => student.Email.ToLower() == email.ToLower());
+            if(student == null)
+                return null;
+            var studentDetails = new StudentDetails
+            {
+                Id = student.Id,
+                FullName = student.FullName,
+                Gender = student.Gender,
+                DateOfBirth = student.DateOfBirth,
+                Address = student.Address,
+                PhoneNumber = student.PhoneNumber,
+                OriginCountry = student.OriginCountry,
+                DateCreated = student.DateCreated,
+                LastModified = student.LastModified
+            };
+            return studentDetails;
 
+        }
+        public async Task<StudentRegistration> GetStudentByUsernameAsync(string username)
+        {
+            var student = await _context.Students
+           .FirstOrDefaultAsync(student => student.Username.ToLower() == username.ToLower());
+            if (student == null)
+                return null;
+            
+            var studentregistration = new StudentRegistration
+            {
+                Username = student.Username,
+                Email = student.Email,
+                Password = student.Password,
+                DateCreated = DateTime.Now,
+                Address = student.Address,
+                FullName = student.FullName,
+                DateOfBirth = DateTime.Now,
+                Gender = student.Gender,
+                PhoneNumber = student.PhoneNumber,
+                OriginCountry = student.OriginCountry,
+                LastModified = student.LastModified
+
+            };
+            return studentregistration;
+
+        }
 
         public async Task<IEnumerable<StudentDetails>> GetAllStudentsAsync()
         {
-            var students = await _context.Students 
+            var students = await _context.Students
                 .Select(Student => new StudentDetails
-            {
-                Id = Student.Id,
-                FullName = Student.FullName,
-                Gender = Student.Gender,
-                DateOfBirth = Student.DateOfBirth,
-                Address = Student.Address,
-                PhoneNumber = Student.PhoneNumber,
-                OriginCountry = Student.OriginCountry,
-                DateCreated = Student.DateCreated
-                
+                {
+                    Id = Student.Id,
+                    FullName = Student.FullName,
+                    Gender = Student.Gender,
+                    DateOfBirth = Student.DateOfBirth,
+                    Address = Student.Address,
+                    PhoneNumber = Student.PhoneNumber,
+                    OriginCountry = Student.OriginCountry,
+                    DateCreated = Student.DateCreated,
+                    LastModified = Student.LastModified
 
 
-            }).ToListAsync();
+                }).ToListAsync();
 
             return students;
         }
-
 
         public async Task<StudentDetails> GetStudentByIdAsync(int studentId)
         {
@@ -110,23 +146,68 @@ namespace MCUniverse.Services
 
         public async Task<bool> UpdateStudentByIdAsync(StudentUpdate model)
         {
-            var Student = await _context.Students.FindAsync(model.Id);
 
-            Student.FullName = model.FullName;
-            Student.Gender = model.Gender;
-            Student.DateOfBirth = model.DateOfBirth;
-            Student.Address = model.Address;
-            Student.PhoneNumber = model.PhoneNumber;
-            Student.OriginCountry = model.OriginCountry;
-            Student.LastModified = model.LastModified;
-       
-                        
+            var student = await _context.Students.FindAsync(model.Id);
+            student.FullName = model.FullName;
+            student.Gender = model.Gender;
+            student.DateOfBirth = model.DateOfBirth;
+            student.Address = model.Address;
+            student.PhoneNumber = model.PhoneNumber;
+            student.OriginCountry = model.OriginCountry;
+            student.LastModified = DateTime.Now;
+
+
             var numberOfChanges = await _context.SaveChangesAsync();
-            return numberOfChanges > 0;
+            return numberOfChanges == 1;
+        }
+
+        public async Task<bool> EnrollingStudentById(int StudentId, int CourseId)
+        {
+            Student student = await _context.Students
+
+                .Include(Student => Student.courses)
+                .Where(Student => Student.Id == StudentId)
+                .FirstOrDefaultAsync();
+            if (student == null)
+                return false;
+
+            CourseEntity entity = await _context.Courses
+                .Where(entity => entity.Id == CourseId)
+                .FirstOrDefaultAsync();
+            if (entity == null)
+                return false;
+
+            //adding student to courseEntity & also adding courseEntity to student
+            student.courses.Add(entity);
+            //now adding student to courses
+            entity.students.Add(student);
+
+            var numberOfChanges = await _context.SaveChangesAsync();
+            return numberOfChanges == 1;
+        }
+
+        public async Task<IEnumerable<CourseListItem>> GetCourseEnrollmentByIdAsync(int studentId)
+        {
+            var student = await _context.Students.Include(student => student.courses)
+                .FirstOrDefaultAsync(e => e.Id == studentId);
+            if (student == null)
+                return null;
+            List<CourseListItem> CourseEnrollmentInfo = student.courses.Select(s => new CourseListItem
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Credits = s.Credits,
+                Semester = s.Semester
+            
+            }).ToList();
+            return CourseEnrollmentInfo;
+
+
         }
 
     }
 }
+
 
 
 

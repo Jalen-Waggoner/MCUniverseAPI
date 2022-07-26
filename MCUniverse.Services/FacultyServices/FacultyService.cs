@@ -172,7 +172,7 @@ public class FacultyService : IFacultyService
             return null;
 
         return faculties;
-    }
+    }*/
 
 
 
@@ -189,7 +189,7 @@ public class FacultyService : IFacultyService
     //var course = _context.Courses.FindAsync(courseId);
 
     //_context.Faculties.Courses.Add(course);
-
+/*
     public async Task<Faculty> GetFacultyByEmailAsync(string email)
     {
         return await _context.Faculties.FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
@@ -199,5 +199,5 @@ public class FacultyService : IFacultyService
     {
         return await _context.Faculties.FirstOrDefaultAsync(f => f.UserName.ToLower() == userName.ToLower());
     }
-}
-*/
+}*/
+

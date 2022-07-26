@@ -1,9 +1,10 @@
-<<<<<<< HEAD
-﻿/*using MCUniverse.Models.FacultyModels;
-=======
+
+/*﻿using MCUniverse.Models.FacultyModels;
 ﻿using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
->>>>>>> 779fb81bc88aaa0ebfd0e4423d428a8cd51b3b24
+using MCUniverse.Models.FacultyModels;
+using MCUniverse.Models.Course;
+using MCUniverse.Models.FacultyModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

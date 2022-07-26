@@ -158,13 +158,13 @@ namespace MCUniverse.Services
             return await _context.SaveChangesAsync() == 1;
         }
 
-     *//*   public async Task<> Enroll(int studentId, int courseToStart, int courseToStop)
+       public async Task<> Enroll(int studentId, int courseToStart, int courseToStop)
         {
             Student student = await _context.Students
                 .Include(student => student.courses)
                 .Where(student => student.Id == studentId)
                 .FirstOrDefaultAsync();
-        }*//*
+        }
 
     }
 }*/
