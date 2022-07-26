@@ -1,5 +1,4 @@
-﻿using MCUniverse.Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Models.Course
 {
+
+    // Making course model to create a new courseEntity
     public class CourseCreate
     {
         [Required]
@@ -28,5 +29,13 @@ namespace MCUniverse.Models.Course
         public string Building { get; set; } = null!;
         [Required]
         public int RoomNumber { get; set; }
+    }
+
+    // making semester enum (0 = fall, 1 = spring, 2 = summer)
+    public enum Season
+    {
+        Fall = 0,
+        Spring = 1,
+        Summer = 2
     }
 }

@@ -46,66 +46,74 @@ namespace MCUniverse.WebAPI.Controllers
             return Ok(courses);
         }
 
-       // // GET: api/Course/5
-       [HttpGet("{courseId:int}")]
-       public async Task<IActionResult> ShowCourseByCourseId([FromRoute] int courseId)
+        // // GET: api/Course/5
+        [HttpGet("courseId")]
+       public async Task<IActionResult> ShowCourseByCourseId([FromQuery] int courseId)
         {
             var course = await _cService.ShowCoursebyCourseIdAsync(courseId);
             return Ok(course);
         }
 
         //GET: api/Course/FacultyId/5
-        [HttpGet("~/api/course/FacultyId/{facultyId:int}")]
-        public async Task<IActionResult> ShowCoursesByFacultyId(int facultyId)
+        [HttpGet("facultyId")]
+        public async Task<IActionResult> ShowCoursesByFacultyId([FromQuery] int facultyId)
         {
             var courses = await _cService.ShowAllCoursesByFacultyIdAsync(facultyId);
             return Ok(courses);
         }
 
         //GET: api/Course/Credits/3
-        [HttpGet("~/api/course/credits/{credits:int}")]
-        public async Task<IActionResult> ShowCoursesByCredits(int credits)
+        [HttpGet("credits")]
+        public async Task<IActionResult> ShowCoursesByCredits([FromQuery] int credits)
         {
             var courses = await _cService.ShowAllCoursesByCreditsAsync(credits);
             return Ok(courses);
         }
 
         //GET: api/Course/Semester/1
-        [HttpGet("~/api/course/semester/{semester}")]
-        public async Task<IActionResult> ShowCoursesBySemester(Season semester)
+        [HttpGet("semester")]
+        public async Task<IActionResult> ShowCoursesBySemester([FromQuery] int semester)
         {
             var courses = await _cService.ShowAllCoursesBySemesterAsync(semester);
             return Ok(courses);
         }
 
         //GET: api/Course/Name/"name"
-        [HttpGet("~/api/course/name/{name}")]
-        public async Task<IActionResult> ShowCoursesByName(string name)
+        [HttpGet("keyword")]
+        public async Task<IActionResult> ShowCoursesByName([FromQuery] string keyword)
         {
-            var courses = await _cService.ShowAllCoursesByNameAsync(name);
+            var courses = await _cService.ShowCourseByNameAsync(keyword);
             return Ok(courses);
         }
 
         // PUT: api/Course
-        [HttpPut]
-        public async Task<IActionResult> UpdateCourse([FromForm] CourseUpdate adjCourse)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateCourse([FromQuery] int courseId, [FromForm] CourseUpdate adjCourse)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return await _cService.UpdateCourseAsync(adjCourse)
+            return await _cService.UpdateCourseAsync(courseId, adjCourse)
                 ? Ok("Course was successfully updated!")
                 : BadRequest("Course could not be updated");
         }
 
         // DELETE: api/Course/5
-        [HttpDelete("{courseId:int}")]
-        public async Task<IActionResult> DeleteCourse([FromRoute] int courseId)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteCourse([FromQuery] int courseId)
         {
             return await _cService.DeleteCourseAsync(courseId)
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
+        }
+        
+        // GET: api/Course/5
+        [HttpGet("students")]
+        public async Task<IActionResult> ShowStudentsByCourseId([FromQuery] int courseId)
+        {
+                var course = await _cService.ShowStudentsbyCourseIdAsync(courseId);
+                return Ok(course);
         }
     }
 }
