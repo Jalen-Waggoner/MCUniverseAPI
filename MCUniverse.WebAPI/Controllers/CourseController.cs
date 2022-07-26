@@ -48,7 +48,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         // // GET: api/Course/5
         [HttpGet("courseId")]
-       public async Task<IActionResult> ShowCourseByCourseId([FromQuery] int courseId)
+        public async Task<IActionResult> ShowCourseByCourseId([FromQuery] int courseId)
         {
             var course = await _cService.ShowCoursebyCourseIdAsync(courseId);
             return Ok(course);
@@ -107,13 +107,13 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
         }
-        
+
         // GET: api/Course/5
         [HttpGet("students")]
         public async Task<IActionResult> ShowStudentsByCourseId([FromQuery] int courseId)
         {
-                var course = await _cService.ShowStudentsbyCourseIdAsync(courseId);
-                return Ok(course);
+            var course = await _cService.ShowStudentsbyCourseIdAsync(courseId);
+            return Ok(course);
         }
     }
 }

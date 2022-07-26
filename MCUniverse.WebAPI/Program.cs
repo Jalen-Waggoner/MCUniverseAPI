@@ -2,11 +2,13 @@ using MCUniverse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MCUniverse.Services;
+using MCUniverse.Services.FacultyServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+
 var connectionString = builder.Configuration.GetConnectionString("SairaConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
@@ -17,7 +19,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddScoped<ICourseService, CourseService>();
+
+builder.Services.AddScoped<IFacultyService, FacultyService>();
+
 
 var app = builder.Build();
 

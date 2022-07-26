@@ -1,4 +1,4 @@
-﻿using MCUniverse.Data.Entities;
+using MCUniverse.Data.Entities;
 using MCUniverse.Models;
 using MCUniverse.Models.Course;
 using System;

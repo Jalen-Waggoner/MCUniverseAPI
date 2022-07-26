@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -89,17 +90,17 @@ namespace MCUniverse.Services
                 .Include(entity => entity.students)
                 .FirstOrDefaultAsync(entity => entity.Id == courseId);
 
-                // Finding course in Courses table that has the same course Id as the integer in the parameters
-                // FindAsync only finds primary keys, cannot be used before or after other LINQ functions
-
-            var FID = course.FacultyId;
-            var name = await ShowFacultyName(FID);
+            // Finding course in Courses table that has the same course Id as the integer in the parameters
+            // FindAsync only finds primary keys, cannot be used before or after other LINQ functions
 
             // Checking if course variable has a CourseEntity or not (is null or not)
             if (course == null)
 
                 // If course is null the method will return null to the controller
                 return null;
+
+            var FID = course.FacultyId;
+            var name = await ShowFacultyName(FID);
 
             // If course variable is a CourseEntity, it adds the CourseEntity data to the properties in the CourseDetail model and returns it to the controller
             return new CourseDetail
@@ -286,3 +287,4 @@ namespace MCUniverse.Services
         }
     }
 }
+
