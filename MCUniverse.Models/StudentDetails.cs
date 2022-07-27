@@ -1,4 +1,5 @@
-﻿using System;
+using MCUniverse.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace MCUniverse.Models
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
-
 /*       [EmailAddress]
         public string Email { get; set; }
 
@@ -34,6 +34,9 @@ namespace MCUniverse.Models
             set => _confirmPassword = replaceEmptyWithNull(value);
         }*/
 
+
+        [EmailAddress]
+        public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string OriginCountry { get; set; }
         public DateTime DateCreated { get; set; }

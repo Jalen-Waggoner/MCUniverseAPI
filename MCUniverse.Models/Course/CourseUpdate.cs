@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MCUniverse.Models.Course
 {
+    // Course model with a few properties that the faculty member can change/update about a course
     public class CourseUpdate
     {
-        [Required]
-        public int Id { get; set; }
+        public int FacultyId { get; set; } 
         [Required]
         public string StartTime { get; set; }
         [Required]

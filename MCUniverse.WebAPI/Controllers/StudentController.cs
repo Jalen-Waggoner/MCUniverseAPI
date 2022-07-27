@@ -212,9 +212,6 @@ namespace MCUniverse.WebAPI.Controllers
         public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
         var student = await _service.GetStudentByIdAsync(studentId);
-            return Ok(student);
-         }*/
+            return Ok(student); */
 
-    }
-}
 
