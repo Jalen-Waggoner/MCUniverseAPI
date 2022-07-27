@@ -14,16 +14,22 @@ namespace MCUniverse.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
         [Required]
         [MinLength(6)]
         public string Username { get; set; }
-
         [Required]
         [MinLength(7)]
         public string Password { get; set; }
         [Required]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string FullName { get; set; } = null!;
+        public string Gender { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        [Phone]
+        public string PhoneNumber { get; set; }
+        public string OriginCountry { get; set; } = null!;
+        public DateTime DateCreated { get; set; }
     }
 }

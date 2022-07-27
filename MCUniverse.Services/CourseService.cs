@@ -237,10 +237,8 @@ namespace MCUniverse.Services
             _context.Courses.Remove(course);
             return await _context.SaveChangesAsync() == 1;
         }
-
-
-
-
+        
+        
         // Method to show list of students enrolled in a course
         public async Task<IEnumerable<StudentDetails>> ShowStudentsbyCourseIdAsync(int courseId)
         {
@@ -287,4 +285,3 @@ namespace MCUniverse.Services
         }
     }
 }
-
