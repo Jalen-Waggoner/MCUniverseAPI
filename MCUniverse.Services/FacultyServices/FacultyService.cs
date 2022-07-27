@@ -126,7 +126,7 @@ public class FacultyService : IFacultyService
                 Id = c.Id,
                 Name = c.Name,
                 Credits = c.Credits,
-                Semester = c.Semester,
+                Semester = (Season)c.Semester,
             }).ToListAsync();
 
         if (courses.Count == 0)
