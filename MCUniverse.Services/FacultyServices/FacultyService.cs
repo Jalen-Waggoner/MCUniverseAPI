@@ -1,4 +1,4 @@
-﻿using MCUniverse.Data;
+using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
@@ -85,7 +85,7 @@ public class FacultyService : IFacultyService
 
     //Update a Faculty Member By Id
     public async Task<bool> UpdateFacultyAsync(FacultyUserInfoUpdate request)
-    { 
+    {
         var faculty = await _context.Faculties.FindAsync(request.Id);
 
         faculty.Id = request.Id;
@@ -158,19 +158,19 @@ public class FacultyService : IFacultyService
             return null;
 
         search = search.ToLower();
-            var faculties = await _context.Faculties.Where(f =>
-            f.FirstName.ToLower() == search ||
-            f.LastName.ToLower() == search)
-            .Select(f => new FacultyDetail
-            {
-                Id = f.Id,
-                UserName = f.UserName,
-                Email = f.Email,
-                FirstName = f.FirstName,
-                LastName = f.LastName,
-                PhoneNumber = f.PhoneNumber,
-            }
-            ).ToListAsync();
+        var faculties = await _context.Faculties.Where(f =>
+        f.FirstName.ToLower() == search ||
+        f.LastName.ToLower() == search)
+        .Select(f => new FacultyDetail
+        {
+            Id = f.Id,
+            UserName = f.UserName,
+            Email = f.Email,
+            FirstName = f.FirstName,
+            LastName = f.LastName,
+            PhoneNumber = f.PhoneNumber,
+        }
+        ).ToListAsync();
 
         if (faculties.Count() == 0)
             return null;
@@ -183,8 +183,6 @@ public class FacultyService : IFacultyService
     public async Task<bool> UpdateFacultyUserNameAndPasswordAsync(FacultyLogInUpdate request)
     {
         var faculty = await _context.Faculties.FindAsync(request.Id);
-        
-
         faculty.Id = request.Id;
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
@@ -194,4 +192,5 @@ public class FacultyService : IFacultyService
         return numberOfChanges == 1;
     }
 }
+
 
