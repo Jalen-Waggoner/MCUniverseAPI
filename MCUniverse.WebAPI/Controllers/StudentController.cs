@@ -28,6 +28,20 @@ namespace MCUniverse.WebAPI.Controllers
         }
 
         //STUDENT REGISTRATION
+        /*We are using an async method called Student Registration that returns an IActionResult.
+        IActionResult is an interface which HTTP Action Results follow-these results will contain an HTTP status code,
+        and/or either some data or an error message.
+        /* We are using the StudentRegistration model we created to represent our data from incoming POST request. 
+        We should be getting all the information that's listed in our StudentRegistration model. As we already know that the ID is added by 
+        EntityFramework so a POST request doesn't need to include one. */
+
+        // ModelState is a Controller property we are using to determine if the data being added is valid:
+        // If the data is not valid, then we want to return a Bad Request (400) error, along with the ModelState,
+        // which will contain information about why the data is not valid.
+
+
+        // If the data is valid, we want to add it to our database 
+        // After we save the updates to the database, we can return an OK student was registered
 
         // POST: api/Student
         [HttpPost("Register")]
