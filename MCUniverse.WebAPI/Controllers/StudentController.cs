@@ -60,7 +60,7 @@ namespace MCUniverse.WebAPI.Controllers
             return BadRequest("Student could not be registered.");
         }
 
-         // Get All Student
+        // Get All Student
         /* We have a couple of Get endpoints to our Student Controller to read from our Student table.
          * In this method, we will return all Students from the database as an OK (200) response
          * /*/
@@ -87,10 +87,10 @@ namespace MCUniverse.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById([FromRoute] int id)
         {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-        var students = await _service.GetStudentByIdAsync(id);
-        return Ok(students);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByIdAsync(id);
+            return Ok(students);
 
         }
 
@@ -133,7 +133,7 @@ namespace MCUniverse.WebAPI.Controllers
 
         }*/
 
-         // Update Student By Id
+        // Update Student By Id
 
         /* To update a Student, we need a PUT endpoint. We are adding a method called Update Student By Id that takes in a Student Update 
          * model and Id as parameters. */
@@ -151,17 +151,17 @@ namespace MCUniverse.WebAPI.Controllers
                  : BadRequest(ModelState);
         }
 
-         //Delete Student By Id
+        //Delete Student By Id
 
         /* Like the Get Student By Id and Update Student By Id methods, we will be deleting the student by their Id number.
          *        
          */
 
-         // DELETE: api/Student/5
+        // DELETE: api/Student/5
         [HttpDelete("{studentId}")]
-        public async Task<IActionResult> DeleteStudentById([FromRoute]int studentId)
+        public async Task<IActionResult> DeleteStudentById([FromRoute] int studentId)
         {
-        
+
             return await _service.DeleteStudentByIdAsync(studentId)
                 ? Ok($"Student {studentId} was deleted sucessfully.")
                 : BadRequest($"Note{studentId} could not be deleted.");
@@ -182,7 +182,7 @@ namespace MCUniverse.WebAPI.Controllers
             return Ok("Student successfully enrolled.");
         }
 
-         // Get Course Enrollment By Id
+        // Get Course Enrollment By Id
         // CourseEnrollment
         [HttpGet("StudentId/{studentId}")]
         public async Task<IActionResult> GetCourseEnrollmentById([FromRoute] int studentId)
@@ -195,7 +195,7 @@ namespace MCUniverse.WebAPI.Controllers
         }
 
         [HttpPut("UpdateCourseEnrollment/{studentId}/{oldCourseId}/{newCourseId}")]
-        public async Task<IActionResult> UpdateCourseEnrollmentById([FromRoute]int studentId, int oldCourseId, int newCourseId)
+        public async Task<IActionResult> UpdateCourseEnrollmentById([FromRoute] int studentId, int oldCourseId, int newCourseId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -218,14 +218,14 @@ namespace MCUniverse.WebAPI.Controllers
                 ? Ok($"Student's enrollment {studentId} was deleted sucessfully.")
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
+    }
 
 
-
-        /*  [Authorize]
-        [HttpGet("{studentId:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int studentId)
-        {
-        var student = await _service.GetStudentByIdAsync(studentId);
-            return Ok(student); */
-
+    /*  [Authorize]
+    [HttpGet("{studentId:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int studentId)
+    {
+    var student = await _service.GetStudentByIdAsync(studentId);
+        return Ok(student); */
+}
 

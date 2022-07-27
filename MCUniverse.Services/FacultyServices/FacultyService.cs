@@ -85,7 +85,7 @@ public class FacultyService : IFacultyService
 
     //Update a Faculty Member By Id
     public async Task<bool> UpdateFacultyAsync(FacultyUserInfoUpdate request)
-    { 
+    {
         var faculty = await _context.Faculties.FindAsync(request.Id);
 
         faculty.Id = request.Id;
@@ -126,7 +126,7 @@ public class FacultyService : IFacultyService
                 Id = c.Id,
                 Name = c.Name,
                 Credits = c.Credits,
-                Semester = c.Semester,
+                Semester = (Season)c.Semester,
             }).ToListAsync();
 
         if (courses.Count == 0)
@@ -158,19 +158,19 @@ public class FacultyService : IFacultyService
             return null;
 
         search = search.ToLower();
-            var faculties = await _context.Faculties.Where(f =>
-            f.FirstName.ToLower() == search ||
-            f.LastName.ToLower() == search)
-            .Select(f => new FacultyDetail
-            {
-                Id = f.Id,
-                UserName = f.UserName,
-                Email = f.Email,
-                FirstName = f.FirstName,
-                LastName = f.LastName,
-                PhoneNumber = f.PhoneNumber,
-            }
-            ).ToListAsync();
+        var faculties = await _context.Faculties.Where(f =>
+        f.FirstName.ToLower() == search ||
+        f.LastName.ToLower() == search)
+        .Select(f => new FacultyDetail
+        {
+            Id = f.Id,
+            UserName = f.UserName,
+            Email = f.Email,
+            FirstName = f.FirstName,
+            LastName = f.LastName,
+            PhoneNumber = f.PhoneNumber,
+        }
+        ).ToListAsync();
 
         if (faculties.Count() == 0)
             return null;
@@ -183,21 +183,7 @@ public class FacultyService : IFacultyService
     public async Task<bool> UpdateFacultyUserNameAndPasswordAsync(FacultyLogInUpdate request)
     {
         var faculty = await _context.Faculties.FindAsync(request.Id);
-        
 
-
-    //var faculty = await _context.Faculties.FindAsync(facultyId);
-    //if (faculty.Id == 0)
-    //    return false;
-
-    //var course = _context.Courses.FindAsync(courseId);
-
-    //_context.Faculties.Courses.Add(course);
-
-    public async Task<Faculty> GetFacultyByEmailAsync(string email)
-    {
-        return await _context.Faculties.FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
-    }
         faculty.Id = request.Id;
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
@@ -206,5 +192,5 @@ public class FacultyService : IFacultyService
 
         return numberOfChanges == 1;
     }
-
+}
 
