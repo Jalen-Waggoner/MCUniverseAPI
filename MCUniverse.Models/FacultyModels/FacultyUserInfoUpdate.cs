@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MCUniverse.Models.FacultyModels
 {
     public class FacultyUserInfoUpdate
-    {   
+    {
         [Required]
         [MinLength(2, ErrorMessage = "Error: {0} must contain at least {1} characters.")]
         [MaxLength(30, ErrorMessage = "Error: {0} must contain no more than {1} characters.")]

@@ -1,4 +1,4 @@
-﻿using MCUniverse.Data;
+using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
@@ -83,9 +83,9 @@ public class FacultyService : IFacultyService
 
 
 
-    //Update a Faculty User Info By Id
+    //Update a Faculty Member By Id
     public async Task<bool> UpdateFacultyUserInfoAsync(int facultyId, FacultyUserInfoUpdate request)
-    { 
+    {
         var faculty = await _context.Faculties.FindAsync(facultyId);
 
         if (faculty == null)
@@ -126,7 +126,7 @@ public class FacultyService : IFacultyService
                 Id = c.Id,
                 Name = c.Name,
                 Credits = c.Credits,
-                Semester = c.Semester,
+                Semester = (Season)c.Semester,
             }).ToListAsync();
 
         if (courses.Count == 0)
@@ -158,9 +158,9 @@ public class FacultyService : IFacultyService
             return null;
 
         keyword = keyword.ToLower();
-
-        var faculty = await _context.Faculties.Where(f => f.FirstName.ToLower().Contains(keyword) || 
-        f.LastName.ToLower().Contains(keyword))
+        var faculties = await _context.Faculties.Where(f =>
+        f.FirstName.ToLower() == keyword ||
+        f.LastName.ToLower() == keyword)
         .Select(f => new FacultyDetail
         {
             Id = f.Id,
@@ -168,15 +168,14 @@ public class FacultyService : IFacultyService
             Email = f.Email,
             FirstName = f.FirstName,
             LastName = f.LastName,
-            PhoneNumber = f.PhoneNumber
-        })
-        .ToListAsync();
-        
+            PhoneNumber = f.PhoneNumber,
+        }
+        ).ToListAsync();
 
-        if (faculty.Count() == 0)
+        if (faculties.Count() == 0)
             return null;
 
-        return faculty;
+        return faculties;
     }
 
 
@@ -184,14 +183,12 @@ public class FacultyService : IFacultyService
     public async Task<bool> UpdateFacultyLoginAsync(int facultyId, FacultyLogInUpdate request)
     {
         var faculty = await _context.Faculties.FindAsync(facultyId);
-
-        if (faculty == null)
-            return false;
-
+        
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
 
         return await _context.SaveChangesAsync() == 1;
     }
 }
+
 

@@ -2,7 +2,6 @@ using MCUniverse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MCUniverse.Services;
-//using MCUniverse.Services.FacultyServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MCUniverse.Services.Token;
@@ -13,16 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-
 builder.Services.AddScoped<ICourseService, CourseService>();
-
 builder.Services.AddScoped<IFacultyService, FacultyService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -44,8 +43,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
 
 
 

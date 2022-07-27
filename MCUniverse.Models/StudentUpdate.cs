@@ -9,7 +9,7 @@ namespace MCUniverse.Models
 {
         public class StudentUpdate
         {
-        [Key]
+        [Required]
         public int Id { get; set; }
         [Required]
         public string FullName { get; set; }
@@ -23,8 +23,6 @@ namespace MCUniverse.Models
         public string PhoneNumber { get; set; }
         [Required]
         public string OriginCountry { get; set; }
-        [Required]
-        public DateTime DateCreated { get; set; }
         [Required]
         public DateTime LastModified { get; set; }
 
