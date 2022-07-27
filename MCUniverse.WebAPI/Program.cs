@@ -7,20 +7,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MCUniverse.Services.Token;
 using System.Text;
-
+using MCUniverse.Services.FacultyServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 var connectionString = builder.Configuration.GetConnectionString("FloriaConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IFacultyService, FacultyService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -42,11 +44,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-/*builder.Services.AddScoped<ICourseService, CourseService>();
-
-builder.Services.AddScoped<IFacultyService, FacultyService>();
-builder.Services.AddScoped<ICourseService, CourseService>();*/
 
 
 var app = builder.Build();
