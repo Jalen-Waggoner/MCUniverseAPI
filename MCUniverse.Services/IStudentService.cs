@@ -17,7 +17,7 @@ namespace MCUniverse.Services
         Task<IEnumerable<StudentDetails>> GetAllStudentsAsync();
         Task<StudentDetails> GetStudentByEmailAsync(string email);
         Task<StudentRegistration> GetStudentByUsernameAsync(string username);
-        Task<bool> UpdateStudentByIdAsync(StudentUpdate model);
+        Task<bool> UpdateStudentByIdAsync(int StudentId, StudentUpdate model);
         Task<bool> DeleteStudentByIdAsync(int studentId);
 
         // Course enrollment
