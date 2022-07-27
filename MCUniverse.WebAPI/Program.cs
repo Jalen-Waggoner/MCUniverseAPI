@@ -2,22 +2,49 @@ using MCUniverse.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MCUniverse.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using MCUniverse.Services.Token;
+using System.Text;
+using MCUniverse.Services.FacultyServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("FloriaConnection");
+
+var connectionString = builder.Configuration.GetConnectionString("SairaConnection");
+
+
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IFacultyService, FacultyService>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICourseService, CourseService>();
+
 
 var app = builder.Build();
 
@@ -30,6 +57,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Adds AuthenticationMiddleware to the IApplicationBuilder, enabling authentication capabilities.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,131 +9,225 @@ using MCUniverse.Data.Entities;
 using MCUniverse.Data;
 using MCUniverse.Models;
 using MCUniverse.Services;
+using Microsoft.AspNetCore.Authorization;
+using MCUniverse.Services.Token;
+using MCUniverse.Models.Token;
 
 namespace MCUniverse.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentsController : ControllerBase
     {
         private readonly IStudentService _service;
-        public StudentController(IStudentService service)
+        private readonly ITokenService _tokenService;
+        public StudentsController(IStudentService service, ITokenService tokenService)
         {
             _service = service;
+            _tokenService = tokenService;
         }
 
-        // GET: api/Student
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudent()
-        {
-          if (_service.Student == null)
-          {
-              return NotFound();
-          }
-            return await _service.Students.ToListAsync();
-        }
+        //STUDENT REGISTRATION
+        /*We are using an async method called Student Registration that returns an IActionResult.
+        IActionResult is an interface which HTTP Action Results follow-these results will contain an HTTP status code,
+        and/or either some data or an error message.
+        /* We are using the StudentRegistration model we created to represent our data from incoming POST request. 
+        We should be getting all the information that's listed in our StudentRegistration model. As we already know that the ID is added by 
+        EntityFramework so a POST request doesn't need to include one. */
 
-        // GET: api/Studentss/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Students>> GetStudent(int id)
-        {
-          if (_service.Student == null)
-          {
-              return NotFound();
-          }
-            var Student = await _service.Student.FindAsync(id);
+        // ModelState is a Controller property we are using to determine if the data being added is valid:
+        // If the data is not valid, then we want to return a Bad Request (400) error, along with the ModelState,
+        // which will contain information about why the data is not valid.
 
-            if (Student == null)
-            {
-                return NotFound();
-            }
 
-            return Student;
-        }
-
-        // PUT: api/Student/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student Student)
-        {
-            if (id != Student.Id)
-            {
-                return BadRequest();
-            }
-
-            _service.Entry(Student).State = EntityState.Modified;
-
-            try
-            {
-                await _service.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+        // If the data is valid, we want to add it to our database 
+        // After we save the updates to the database, we can return an OK student was registered
 
         // POST: api/Student
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Student>> RegisterStudent([FromBody]StudentRegistration model)
+        [HttpPost("Register")]
+        public async Task<IActionResult> RegisterStudent([FromBody] StudentRegistration model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var registerResult = await _service.RegisterStudentAsync(model);
-            if(registerResult)
+            if (registerResult)
             {
                 return Ok("Student was registered");
             }
             return BadRequest("Student could not be registered.");
         }
 
+        // Get All Student
+        /* We have a couple of Get endpoints to our Student Controller to read from our Student table.
+         * In this method, we will return all Students from the database as an OK (200) response
+         * /*/
 
-  /*        if (_service.Student == null)
-          {
-              return Problem("Entity set 'MCUniverseWebAPIContext.Student'  is null.");
-          }
-            _service.Student.Add(Student);
-            await _service.SaveChangesAsync();
+        // GET: api/Student
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetStudent", new { id = Student.Id }, Student);
+            var students = await _service.GetAllStudentsAsync();
+            return Ok(students);
+        }
+
+
+        // Get Student By Id
+
+        /* we are using async method called GetStudentById that also returns an IActionResult.Over here, our GetStudentById method will
+        * take in an Id as an integer parameter and use that to find and return a specific student.
+        */
+
+        // GET: api/Students/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStudentById([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByIdAsync(id);
+            return Ok(students);
+
+        }
+
+        //Get Student By Email
+
+        [HttpGet("Email/{email}")]
+        public async Task<IActionResult> GetStudentByEmail([FromRoute] string email)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByEmailAsync(email);
+            return Ok(students);
+
+        }
+
+        //Get Student By Username
+
+        [HttpGet("UserName/{username}")]
+        public async Task<IActionResult> GetStudentByUsername([FromRoute] string username)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByUsernameAsync(username);
+            return Ok(students);
+        }
+
+        // Token Request
+
+        /*[HttpPost("~/api/TokenService")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+                return BadRequest("Invalid username or password.");
+
+            return Ok(tokenResponse);
+
         }*/
 
-        // DELETE: api/Student/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        // Update Student By Id
+
+        /* To update a Student, we need a PUT endpoint. We are adding a method called Update Student By Id that takes in a Student Update 
+         * model and Id as parameters. */
+
+        // PUT: api/Student/5
+        [HttpPut("{StudentId}")]
+        public async Task<IActionResult> UpdateStudentById(int StudentId, [FromBody] StudentUpdate Student)
         {
-            if (_service.Student == null)
-            {
-                return NotFound();
-            }
-            var Student = await _service.Student.FindAsync(id);
-            if (Student == null)
-            {
-                return NotFound();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _service.Student.Remove(Student);
-            await _service.SaveChangesAsync();
 
-            return NoContent();
+            return await _service.UpdateStudentByIdAsync(StudentId, Student)
+                 ? Ok("Student was updated.")
+                 : BadRequest(ModelState);
         }
 
-        private bool StudentExists(int id)
+        //Delete Student By Id
+
+        /* Like the Get Student By Id and Update Student By Id methods, we will be deleting the student by their Id number.
+         *        
+         */
+
+        // DELETE: api/Student/5
+        [HttpDelete("{studentId}")]
+        public async Task<IActionResult> DeleteStudentById([FromRoute] int studentId)
         {
-            return (_service.Student?.Any(e => e.Id == id)).GetValueOrDefault();
+
+            return await _service.DeleteStudentByIdAsync(studentId)
+                ? Ok($"Student {studentId} was deleted sucessfully.")
+                : BadRequest($"Note{studentId} could not be deleted.");
+        }
+
+        // Enrolling Student By Id
+
+        [HttpPost("EnrollStudent/{StudentId}/{CourseId}")]
+        public async Task<IActionResult> EnrollingStudentById([FromRoute] int StudentId, int CourseId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var courses = await _service.EnrollingStudentById(StudentId, CourseId);
+            if (courses == false)
+                return NotFound("Invalid request.");
+
+            return Ok("Student successfully enrolled.");
+        }
+
+        // Get Course Enrollment By Id
+        // CourseEnrollment
+        [HttpGet("StudentId/{studentId}")]
+        public async Task<IActionResult> GetCourseEnrollmentById([FromRoute] int studentId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetCourseEnrollmentByIdAsync(studentId);
+            return Ok(students);
+
+        }
+
+        [HttpPut("UpdateCourseEnrollment/{studentId}/{oldCourseId}/{newCourseId}")]
+        public async Task<IActionResult> UpdateCourseEnrollmentById([FromRoute] int studentId, int oldCourseId, int newCourseId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var courses = await _service.UpdateCourseEnrollmentByIdAsync(studentId, oldCourseId, newCourseId);
+            if (courses == true)
+                return NotFound("Invalid request.");
+
+            return Ok("Student's information was updated.");
+
+        }
+
+
+        // DELETE: api/Student/5
+        [HttpDelete("DeleteCourse/{studentId}/{oldCourseId}")]
+        public async Task<IActionResult> DeleteStudentEnrollmentById([FromRoute] int studentId, int oldCourseId)
+        {
+
+            return await _service.DeleteStudentEnrollmentByIdAsync(studentId, oldCourseId)
+                ? Ok($"Student's enrollment {studentId} was deleted sucessfully.")
+                : BadRequest($"Note{studentId} could not be deleted.");
         }
     }
+
 }
+
+
+
+    /*  [Authorize]
+    [HttpGet("{studentId:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int studentId)
+    {
+    var student = await _service.GetStudentByIdAsync(studentId);
+        return Ok(student); */
+

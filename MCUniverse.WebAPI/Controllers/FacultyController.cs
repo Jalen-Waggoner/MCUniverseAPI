@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MCUniverse.Data.Entities;
 using MCUniverse.Data;
+using MCUniverse.Services.FacultyServices;
+using MCUniverse.Models.FacultyModels;
 
 namespace MCUniverse.WebAPI.Controllers
 {
@@ -14,133 +16,139 @@ namespace MCUniverse.WebAPI.Controllers
     [ApiController]
     public class FacultyController : ControllerBase
     {
-        private readonly AppDbContext _context;
 
-        public FacultyController(AppDbContext context)
+        private readonly IFacultyService _service;
+
+        public FacultyController(IFacultyService service)
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/Faculty
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Faculty>>> GetFacultyEntity()
-        {
-            if (_context.Faculties == null)
-            {
-                return NotFound();
-            }
-            return await _context.Faculties.ToListAsync();
-        }
 
-        // Get: api/GetCoursesByFacultyId
-        [HttpGet("{id}/Courses")]
-
-        //public async Task<ActionResult<CourseEntity>> GetCoursesByFacultyId(int id)
-        //{
-
-        //    if (id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-            
-        //    var courses = await _context.Courses.Select( c => c.Faculty_id == id).ToListAsync();
-
-        //    if (courses == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-
-        //    return courses;
-        //}
-        
-        // GET: api/Faculty/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Faculty>> GetFacultyEntity(int id)
-        {
-          if (_context.Faculties == null)
-          {
-              return NotFound();
-          }
-            var facultyEntity = await _context.Faculties.FindAsync(id);
-
-            if (facultyEntity == null)
-            {
-                return NotFound();
-            }
-
-            return facultyEntity;
-        }
-
-        // PUT: api/Faculty/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFacultyEntity(int id, Faculty facultyEntity)
-        {
-            if (id != facultyEntity.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(facultyEntity).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FacultyEntityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Faculty
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //CREATE
+        //Route api/Faculty
         [HttpPost]
-        public async Task<ActionResult<Faculty>> PostFacultyEntity(Faculty facultyEntity)
+        public async Task<IActionResult> RegisterFaculty([FromForm] FacultyCreate faculty)
         {
-          if (_context.Faculties == null)
-          {
-              return Problem("Entity set 'MCUniverseWebAPIContext.FacultyEntity'  is null.");
-          }
-            _context.Faculties.Add(facultyEntity);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetFacultyEntity", new { id = facultyEntity.Id }, facultyEntity);
+            var registerResult = await _service.RegisterFacultyAysnc(faculty);
+            if (registerResult)
+                return Ok("Faculty Memeber was created.");
+
+            return BadRequest("Faculty Member was not created. Check entered information");
         }
 
-        // DELETE: api/Faculty/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFacultyEntity(int id)
+
+        //GET BY ID
+        //Route api/Faculty/1
+        [HttpGet("{facultyId:int}")]
+        public async Task<IActionResult> GetFacultyById([FromRoute] int facultyId)
         {
-            if (_context.Faculties == null)
-            {
-                return NotFound();
-            }
-            var facultyEntity = await _context.Faculties.FindAsync(id);
-            if (facultyEntity == null)
-            {
-                return NotFound();
-            }
+            var facultyDetail = await _service.GetFacultyByIdAsync(facultyId);
 
-            _context.Faculties.Remove(facultyEntity);
-            await _context.SaveChangesAsync();
+            if (facultyDetail == null)
+                return NotFound();
 
-            return NoContent();
+            return Ok(facultyDetail);
         }
 
-        private bool FacultyEntityExists(int id)
+
+        //GET ALL
+        //Route api/Faculty
+        [HttpGet]
+        public async Task<IActionResult> GetAllFaculty()
         {
-            return (_context.Faculties?.Any(e => e.Id == id)).GetValueOrDefault();
+            var facultyListItem = await _service.GetAllFacultyAsync();
+
+            if (facultyListItem == null)
+                return NotFound();
+
+            return Ok(facultyListItem);
+        }
+
+
+        //UPDATE USER INFO
+        //Route api/Faculty/1/UpdateUserInfo
+        [HttpPut("{facultyId}/UpdateUserInfo")]
+        public async Task<IActionResult> UpdateFacultyUserInfo(int facultyId, [FromForm] FacultyUserInfoUpdate request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _service.UpdateFacultyUserInfoAsync(facultyId, request)
+                ? Ok("Faculty Member has been updated.")
+                : BadRequest("Faculty Member could not be updated.");
+        }
+
+
+        //DELETE
+        //Route api/Faculty/1
+        [HttpDelete("{facultyId}")]
+        public async Task<IActionResult> DeleteFacultyById(int facultyId)
+        {
+            return await _service.DeleteFacultyAsync(facultyId)
+                ? Ok($"Faculty Member {facultyId} was deleted successfully.")
+                : BadRequest($"Faculty Member {facultyId} could not be deleted.");
+        }
+
+
+        //GET LIST OF COURSES BY FACULTY ID
+        //Route api/Faculty/1/Courses
+        [HttpGet("{facultyId}/Courses")]
+        public async Task<IActionResult> ListCoursesByFacultyId(int facultyId)
+        {
+            if (!ModelState.IsValid)
+                return NotFound(ModelState);
+            var courses = await _service.ListCoursesByFacultyIdAsync(facultyId);
+
+            if (courses == null)
+                return BadRequest();
+
+            return Ok(courses);
+        }
+
+
+        //UPDATE COURSE OWNER BY COURSE ID AND FACULTY ID
+        //Route api/Faculty/AssignCourse?courseId=1&facultyId=1
+        [HttpPut("AssignCourse")]
+        public async Task<IActionResult> AssignCourseToFacultyMemeber(int courseId, int facultyId)
+        {
+            if (!ModelState.IsValid)
+                return NotFound(ModelState);
+
+            var courses = await _service.AssignCourseToFacultyMemeberAsync(courseId, facultyId);
+
+            return Ok("Faculty Member has been changed.");
+        }
+
+
+        //GET BY FIRST NAME OR LAST NAME
+        //Route api/Faculty/Search?keyword=Nicholas
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchFacultyByName(string keyword)
+        {
+            var faculty = await _service.SearchFacultyByNameAsync(keyword);
+
+            if (faculty == null)
+                return NotFound();
+
+            return Ok(faculty);
+        }
+
+
+        //UPDATE FACULTY USERNAME AND PASSWORD
+        //Route api/Faculty/1/UpdateLogIn
+        [HttpPut("{facultyId}/UpdateLogIn")]
+        public async Task<IActionResult> UpdateFacultyLogin(int facultyId, [FromForm]FacultyLogInUpdate request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return await _service.UpdateFacultyLoginAsync(facultyId, request)
+                ? Ok("Faculty User Info has been updated.")
+                : BadRequest("Faculty User Info could not be updated.");
         }
     }
 }
