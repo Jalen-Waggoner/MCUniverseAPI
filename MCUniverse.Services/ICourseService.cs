@@ -11,6 +11,7 @@ namespace MCUniverse.Services
 {
     public interface ICourseService
     {
+        // Add tasks from courseService class so that they can be called from the controller
         Task<bool> CreateCourse(CourseCreate newCourse);
         Task<IEnumerable<CourseListItem>> ShowAllCourses();
         Task<CourseDetail> ShowCoursebyCourseIdAsync(int courseId);
