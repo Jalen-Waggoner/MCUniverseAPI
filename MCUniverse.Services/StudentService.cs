@@ -197,7 +197,7 @@ namespace MCUniverse.Services
                 Id = s.Id,
                 Name = s.Name,
                 Credits = s.Credits,
-                Semester = s.Semester
+                Semester = (Season)s.Semester
 
             }).ToList();
             return CourseEnrollmentInfo;
