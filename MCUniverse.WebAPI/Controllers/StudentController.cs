@@ -139,14 +139,14 @@ namespace MCUniverse.WebAPI.Controllers
          * model and Id as parameters. */
 
         // PUT: api/Student/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudentById([FromBody] StudentUpdate Student)
+        [HttpPut("{StudentId}")]
+        public async Task<IActionResult> UpdateStudentById(int StudentId, [FromBody] StudentUpdate Student)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
 
-            return await _service.UpdateStudentByIdAsync(Student)
+            return await _service.UpdateStudentByIdAsync(StudentId, Student)
                  ? Ok("Student was updated.")
                  : BadRequest(ModelState);
         }
@@ -230,3 +230,4 @@ namespace MCUniverse.WebAPI.Controllers
     {
     var student = await _service.GetStudentByIdAsync(studentId);
         return Ok(student); */
+

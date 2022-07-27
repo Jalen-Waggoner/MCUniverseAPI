@@ -9,8 +9,7 @@ namespace MCUniverse.Models
 {
         public class StudentUpdate
         {
-        [Required]
-        public int Id { get; set; }
+  
         [Required]
         public string FullName { get; set; }
         [Required]

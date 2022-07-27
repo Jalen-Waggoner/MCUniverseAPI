@@ -148,9 +148,12 @@ namespace MCUniverse.Services
             return numberOfChanges == 1;
         }
 
-        public async Task<bool> UpdateStudentByIdAsync(StudentUpdate model)
+        public async Task<bool> UpdateStudentByIdAsync(int StudentId, StudentUpdate model)
         {
-            var student = await _context.Students.FindAsync(model.Id);
+            var student = await _context.Students.FindAsync(StudentId);
+            if (student == null)
+                return false;
+
             student.FullName = model.FullName;
             student.Email = model.Email;
             student.Gender = model.Gender;
