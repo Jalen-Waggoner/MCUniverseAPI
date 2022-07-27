@@ -263,8 +263,6 @@ namespace MCUniverse.Services
         }
 
 
-
-
         // Method to show list of students enrolled in a course
         public async Task<IEnumerable<StudentDetails>> ShowStudentsbyCourseIdAsync(int courseId)
         {

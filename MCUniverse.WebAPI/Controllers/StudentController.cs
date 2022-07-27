@@ -219,15 +219,14 @@ namespace MCUniverse.WebAPI.Controllers
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
     }
+
 }
 
 
 
-        /*  [Authorize]
-        [HttpGet("{studentId:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int studentId)
-        {
-        var student = await _service.GetStudentByIdAsync(studentId);
-            return Ok(student); */
-
-
+    /*  [Authorize]
+    [HttpGet("{studentId:int}")]
+    public async Task<IActionResult> GetById([FromRoute] int studentId)
+    {
+    var student = await _service.GetStudentByIdAsync(studentId);
+        return Ok(student); */

@@ -14,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
+<<<<<<< HEAD
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+=======
+var connectionString = builder.Configuration.GetConnectionString("FloriaConnection");
+>>>>>>> 63f8fba848afaee68166696fc46861cf6463c253
 
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
