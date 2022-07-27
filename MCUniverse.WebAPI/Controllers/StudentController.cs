@@ -220,6 +220,9 @@ namespace MCUniverse.WebAPI.Controllers
         }
     }
 
+}
+
+
 
     /*  [Authorize]
     [HttpGet("{studentId:int}")]
@@ -227,5 +230,3 @@ namespace MCUniverse.WebAPI.Controllers
     {
     var student = await _service.GetStudentByIdAsync(studentId);
         return Ok(student); */
-}
-

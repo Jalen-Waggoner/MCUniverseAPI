@@ -26,6 +26,7 @@ namespace MCUniverse.Services
 
 
         // Method to create a new course entity
+
         // Using a bool to see if an entity was created and saved or not
         // Using the CourseCreate model to create a new CourseEntity
         public async Task<bool> CreateCourse(CourseCreate newCourse)
@@ -41,6 +42,8 @@ namespace MCUniverse.Services
                 EndTime = newCourse.EndTime,
                 ClassDays = newCourse.ClassDays,
                 Credits = newCourse.Credits,
+
+                // Using int helps identify that I want to use the Semester property in the CourseEntity
                 Semester = (int)newCourse.Semester,
                 Building = newCourse.Building,
                 RoomNumber = newCourse.RoomNumber
@@ -57,6 +60,7 @@ namespace MCUniverse.Services
 
 
         // Method to get list of all CourseEntities in the Courses table in the database
+
         // Using IEnumerable to make a list of models
         // Using CourseListItem model to show brief details of the CourseEntities in the table
         public async Task<IEnumerable<CourseListItem>> ShowAllCourses()
@@ -72,7 +76,11 @@ namespace MCUniverse.Services
                     Id = entity.Id,
                     Name = entity.Name,
                     Credits = entity.Credits,
+
+                    // Using Season here helps identify that I want to use the Semester enum in the models
                     Semester = (Season)entity.Semester
+
+                    // Makes each CourseListItem model made into a list
                 }).ToListAsync();
         }
 
@@ -80,6 +88,7 @@ namespace MCUniverse.Services
 
 
         // Method to get course by Id
+
         // Using the CourseDetail model to show all the details of that specific CourseEntity
         // Using course Id to find specific course in Courses table
         public async Task<CourseDetail> ShowCoursebyCourseIdAsync(int courseId)
@@ -87,11 +96,17 @@ namespace MCUniverse.Services
 
             // Setting course variable equal to Courses table in database
             var course = await _context.Courses
+
+                // Using .Include to include the students list in the CourseEntity that the user is looking for
                 .Include(entity => entity.students)
+
+                // Finding course in Courses table that has the same course Id as the integer in the parameters
+                // .FirstorDefaultAsync works like .Where except .Where can only list through items and not just find one item like .FirstorDefaultAsync
+                //.FindAsync cannot be used after another LINQ function
                 .FirstOrDefaultAsync(entity => entity.Id == courseId);
 
-            // Finding course in Courses table that has the same course Id as the integer in the parameters
-            // FindAsync only finds primary keys, cannot be used before or after other LINQ functions
+            
+            
 
             // Checking if course variable has a CourseEntity or not (is null or not)
             if (course == null)
@@ -99,7 +114,10 @@ namespace MCUniverse.Services
                 // If course is null the method will return null to the controller
                 return null;
 
+            // This variable is set equal to the specific CourseEntity's faculty Id
             var FID = course.FacultyId;
+
+            // The faculty Id is plugged into the private method below
             var name = await ShowFacultyName(FID);
 
             // If course variable is a CourseEntity, it adds the CourseEntity data to the properties in the CourseDetail model and returns it to the controller
@@ -108,6 +126,8 @@ namespace MCUniverse.Services
 
                 // property in CourseDetail model = CourseEntity.property
                 Id = course.Id,
+
+                // This output uses the private function to find the faculty's name using their id
                 Professor = name.FullName,
                 Name = course.Name,
                 StartTime = course.StartTime,
@@ -117,6 +137,8 @@ namespace MCUniverse.Services
                 Semester = (Season)course.Semester,
                 Building = course.Building,
                 RoomNumber = course.RoomNumber,
+
+                // This counts the students in the list of the CourseEntity
                 Students = course.students.Count()
             };
         }
@@ -128,11 +150,12 @@ namespace MCUniverse.Services
         public async Task<IEnumerable<CourseListItem>> ShowAllCoursesByFacultyIdAsync(int facultyId)
         {
             // Returns list of CourseListItem models that contain the facutlty Id to the controller
+
             return await _context.Courses
 
                 // Finds CourseEntity in Courses in that has the same faculty id as the parameter
                 // Cannot use .FindAsync because facultyId is not a primary key in the CourseEntity
-                // .Where LINQ function is similar to FirstorDefaultAsync but it has to have another LINQ function after it (it can't be alone)
+                // .Where LINQ function is similar to .FirstorDefaultAsync but .FirstorDefaultAsync cannot list multiple courses, but .Where can
                 .Where(entity => entity.FacultyId == facultyId)
                 .Select(entity => new CourseListItem
                 {
@@ -140,8 +163,6 @@ namespace MCUniverse.Services
                     Name = entity.Name,
                     Credits = entity.Credits,
                     Semester = (Season)entity.Semester
-
-                    // Makes each CourseListItem model made into a list
                 }).ToListAsync();
         }
 
@@ -205,6 +226,9 @@ namespace MCUniverse.Services
         {
             // Finds CourseEntity in Courses table that has the courseId in the parameters
             var course = await _context.Courses
+
+                // Finding CourseEntity based on courseId
+                // FindAsync only finds primary keys, cannot be used before or after other LINQ functions
                 .FindAsync(courseId);
 
             if (course is null)
@@ -238,7 +262,7 @@ namespace MCUniverse.Services
             return await _context.SaveChangesAsync() == 1;
         }
 
-                  
+
         // Method to show list of students enrolled in a course
         public async Task<IEnumerable<StudentDetails>> ShowStudentsbyCourseIdAsync(int courseId)
         {
@@ -270,7 +294,7 @@ namespace MCUniverse.Services
         }
 
 
-
+        // Private method to get faculty names from faculty Id
         private async Task<FacultyName> ShowFacultyName(int facultyId)
         {
             var name = await _context.Courses
@@ -280,6 +304,8 @@ namespace MCUniverse.Services
                 return null;
             return new FacultyName
                 {
+
+                // FullName is set to the faculty FirstName property plus the faculty LastName property
                     FullName = name.faculty.FirstName + " " + name.faculty.LastName
                 };
         }

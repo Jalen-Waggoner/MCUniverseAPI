@@ -10,12 +10,10 @@ using MCUniverse.Data;
 using MCUniverse.Models.Course;
 using MCUniverse.Services;
 
-namespace MCUniverse.WebAPI.Controllers;
+namespace MCUniverse.WebAPI.Controllers
+{ 
 
-[Route("api/[controller]")]
-[ApiController]
-public class CourseController : ControllerBase
-{
+
     // Sets route for URL after https://localhost:xxxx/
     // Controller name is course
     [Route("api/[controller]")]
@@ -201,4 +199,3 @@ public class CourseController : ControllerBase
         }
     }
 }
-
