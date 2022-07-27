@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MCUniverse.Services.Token;
 using System.Text;
-
+using MCUniverse.Services.FacultyServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,9 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+builder.Services.AddScoped<ICourseService, CourseService>();
+
+builder.Services.AddScoped<IFacultyService, FacultyService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -43,10 +46,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-/*builder.Services.AddScoped<ICourseService, CourseService>();
 
-builder.Services.AddScoped<IFacultyService, FacultyService>();
-builder.Services.AddScoped<ICourseService, CourseService>();*/
 
 
 var app = builder.Build();

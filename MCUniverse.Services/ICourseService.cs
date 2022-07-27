@@ -1,9 +1,6 @@
 
-/*﻿using MCUniverse.Models;
-﻿using MCUniverse.Models;
-using MCUniverse.Data.Entities;
 using MCUniverse.Models;
->>>>>>> 919723f8118cd67192995b2ceed13b71376ce203
+using MCUniverse.Data.Entities;
 using MCUniverse.Models.Course;
 using System;
 using System.Collections.Generic;
@@ -25,4 +22,4 @@ namespace MCUniverse.Services
         Task<bool> UpdateCourseAsync(CourseUpdate adjCourse);
         Task<bool> DeleteCourseAsync(int courseId);
     }
-}*/
+}
