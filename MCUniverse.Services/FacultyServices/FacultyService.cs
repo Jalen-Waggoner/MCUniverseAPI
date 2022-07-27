@@ -158,9 +158,10 @@ public class FacultyService : IFacultyService
             return null;
 
         keyword = keyword.ToLower();
+        
         var faculties = await _context.Faculties.Where(f =>
-        f.FirstName.ToLower() == keyword ||
-        f.LastName.ToLower() == keyword)
+        f.FirstName.ToLower().Contains(keyword) ||
+        f.LastName.ToLower().Contains(keyword))
         .Select(f => new FacultyDetail
         {
             Id = f.Id,
@@ -182,14 +183,8 @@ public class FacultyService : IFacultyService
     //Update Faculty UserName and Password
     public async Task<bool> UpdateFacultyLoginAsync(int facultyId, FacultyLogInUpdate request)
     {
-<<<<<<< HEAD
         var faculty = await _context.Faculties.FindAsync(facultyId);
         
-=======
-        var faculty = await _context.Faculties.FindAsync(request.Id);
-
-        faculty.Id = request.Id;
->>>>>>> 63f8fba848afaee68166696fc46861cf6463c253
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
 

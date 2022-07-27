@@ -201,7 +201,7 @@ namespace MCUniverse.WebAPI.Controllers
                 return BadRequest(ModelState);
 
             var courses = await _service.UpdateCourseEnrollmentByIdAsync(studentId, oldCourseId, newCourseId);
-            if (courses == false)
+            if (courses == true)
                 return NotFound("Invalid request.");
 
             return Ok("Student's information was updated.");
