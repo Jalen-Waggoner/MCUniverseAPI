@@ -49,7 +49,7 @@ public class FacultyService : IFacultyService
             return null;
 
         var facultyDetail = new FacultyDetail
-        {
+        { 
             Id = entity.Id,
             UserName = entity.UserName,
             Email = entity.Email,
@@ -68,7 +68,7 @@ public class FacultyService : IFacultyService
         var faculties = await _context.Faculties.
             Select(f => new FacultyListItem
             {
-                Id = f.Id,
+                Id=f.Id,
                 FirstName = f.FirstName,
                 LastName = f.LastName,
             }).ToListAsync();
@@ -84,20 +84,20 @@ public class FacultyService : IFacultyService
 
 
     //Update a Faculty Member By Id
-    public async Task<bool> UpdateFacultyAsync(FacultyUserInfoUpdate request)
+    public async Task<bool> UpdateFacultyUserInfoAsync(int facultyId, FacultyUserInfoUpdate request)
     {
-        var faculty = await _context.Faculties.FindAsync(request.Id);
+        var faculty = await _context.Faculties.FindAsync(facultyId);
 
-        faculty.Id = request.Id;
+        if (faculty == null)
+            return false;
+
         faculty.Email = request.Email;
         faculty.FirstName = request.FirstName;
         faculty.LastName = request.LastName;
         faculty.PhoneNumber = request.PhoneNumber;
         faculty.Gender = request.Gender;
 
-        var numberOfChanges = await _context.SaveChangesAsync();
-
-        return numberOfChanges == 1;
+        return await _context.SaveChangesAsync() == 1;
     }
 
 
@@ -122,7 +122,7 @@ public class FacultyService : IFacultyService
     {
         var courses = await _context.Courses.Where(c => c.FacultyId == facultyId)
             .Select(c => new CourseListItem
-            {
+            { 
                 Id = c.Id,
                 Name = c.Name,
                 Credits = c.Credits,
@@ -152,15 +152,16 @@ public class FacultyService : IFacultyService
 
 
     //Search for a Faculty Member By FirstName or LastName
-    public async Task<IEnumerable<FacultyDetail>> SearchFacultyByNameAsync(string search)
+    public async Task<IEnumerable<FacultyDetail>> SearchFacultyByNameAsync(string keyword)
     {
-        if (search == null)
+        if (keyword == null)
             return null;
 
-        search = search.ToLower();
+        keyword = keyword.ToLower();
+        
         var faculties = await _context.Faculties.Where(f =>
-        f.FirstName.ToLower() == search ||
-        f.LastName.ToLower() == search)
+        f.FirstName.ToLower().Contains(keyword) ||
+        f.LastName.ToLower().Contains(keyword))
         .Select(f => new FacultyDetail
         {
             Id = f.Id,
@@ -180,17 +181,14 @@ public class FacultyService : IFacultyService
 
 
     //Update Faculty UserName and Password
-    public async Task<bool> UpdateFacultyUserNameAndPasswordAsync(FacultyLogInUpdate request)
+    public async Task<bool> UpdateFacultyLoginAsync(int facultyId, FacultyLogInUpdate request)
     {
-        var faculty = await _context.Faculties.FindAsync(request.Id);
-
-        faculty.Id = request.Id;
+        var faculty = await _context.Faculties.FindAsync(facultyId);
+        
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
 
-        var numberOfChanges = await _context.SaveChangesAsync();
-
-        return numberOfChanges == 1;
+        return await _context.SaveChangesAsync() == 1;
     }
 }
 

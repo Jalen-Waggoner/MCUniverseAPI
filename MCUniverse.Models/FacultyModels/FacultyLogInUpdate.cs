@@ -9,7 +9,6 @@ namespace MCUniverse.Models.FacultyModels
 {
     public class FacultyLogInUpdate
     {
-        public int Id { get; set; }
         [Required]
         [MinLength(6, ErrorMessage = "Error: {0} must contain at least {1} characters.")]
         [MaxLength(15, ErrorMessage = "Error: {0} must contain no more than {1} characters.")]

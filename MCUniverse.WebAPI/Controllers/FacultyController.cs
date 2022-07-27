@@ -26,6 +26,7 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //CREATE
+        //Route api/Faculty
         [HttpPost]
         public async Task<IActionResult> RegisterFaculty([FromForm] FacultyCreate faculty)
         {
@@ -41,6 +42,7 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //GET BY ID
+        //Route api/Faculty/1
         [HttpGet("{facultyId:int}")]
         public async Task<IActionResult> GetFacultyById([FromRoute] int facultyId)
         {
@@ -54,6 +56,7 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //GET ALL
+        //Route api/Faculty
         [HttpGet]
         public async Task<IActionResult> GetAllFaculty()
         {
@@ -67,19 +70,21 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //UPDATE USER INFO
-        [HttpPut("{id}/UpdateFacultyInfo")]
-        public async Task<IActionResult> UpdateFacultyById([FromForm] FacultyUserInfoUpdate request)
+        //Route api/Faculty/1/UpdateUserInfo
+        [HttpPut("{facultyId}/UpdateUserInfo")]
+        public async Task<IActionResult> UpdateFacultyUserInfo(int facultyId, [FromForm] FacultyUserInfoUpdate request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return await _service.UpdateFacultyAsync(request)
+            return await _service.UpdateFacultyUserInfoAsync(facultyId, request)
                 ? Ok("Faculty Member has been updated.")
                 : BadRequest("Faculty Member could not be updated.");
         }
 
 
         //DELETE
+        //Route api/Faculty/1
         [HttpDelete("{facultyId}")]
         public async Task<IActionResult> DeleteFacultyById(int facultyId)
         {
@@ -90,7 +95,8 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //GET LIST OF COURSES BY FACULTY ID
-        [HttpGet("{facultyId:int}/Courses")]
+        //Route api/Faculty/1/Courses
+        [HttpGet("{facultyId}/Courses")]
         public async Task<IActionResult> ListCoursesByFacultyId(int facultyId)
         {
             if (!ModelState.IsValid)
@@ -105,6 +111,7 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //UPDATE COURSE OWNER BY COURSE ID AND FACULTY ID
+        //Route api/Faculty/AssignCourse?courseId=1&facultyId=1
         [HttpPut("AssignCourse")]
         public async Task<IActionResult> AssignCourseToFacultyMemeber(int courseId, int facultyId)
         {
@@ -118,10 +125,11 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //GET BY FIRST NAME OR LAST NAME
+        //Route api/Faculty/Search?keyword=Nicholas
         [HttpGet("Search")]
-        public async Task<IActionResult> SearchFacultyByName(string search)
+        public async Task<IActionResult> SearchFacultyByName(string keyword)
         {
-            var faculty = await _service.SearchFacultyByNameAsync(search);
+            var faculty = await _service.SearchFacultyByNameAsync(keyword);
 
             if (faculty == null)
                 return NotFound();
@@ -131,13 +139,14 @@ namespace MCUniverse.WebAPI.Controllers
 
 
         //UPDATE FACULTY USERNAME AND PASSWORD
-        [HttpPut("{id}/UpdateFacultyLogIn")]
-        public async Task<IActionResult> UpdateFacultyLogin([FromForm]FacultyLogInUpdate request)
+        //Route api/Faculty/1/UpdateLogIn
+        [HttpPut("{facultyId}/UpdateLogIn")]
+        public async Task<IActionResult> UpdateFacultyLogin(int facultyId, [FromForm]FacultyLogInUpdate request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return await _service.UpdateFacultyUserNameAndPasswordAsync(request)
+            return await _service.UpdateFacultyLoginAsync(facultyId, request)
                 ? Ok("Faculty User Info has been updated.")
                 : BadRequest("Faculty User Info could not be updated.");
         }
