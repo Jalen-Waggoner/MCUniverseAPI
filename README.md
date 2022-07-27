@@ -4,15 +4,15 @@ This project is a small school enrollment API themed after the Marvel Cinematic 
 
 ### Softwares and Technologies Used:
 * (https://trello.com)  Planning tool
-* (https://dbdiagram.io/d/62d17c4bcc1bc14cc5c813f8) A layout of what the database tables should look like and how they should interact, 
-* Visual Studio, 
-* Azure Data Studio - to access our database and all of our stored data, 
-* SQL Server, 
-* Docker - to contain our database, 
-* ASP.NET utilizing .NET Core, 
-* c#, 
-* swagger -to test out endpoints, 
-* Postman - to test out endpoints, 
+* (https://dbdiagram.io/d/62d17c4bcc1bc14cc5c813f8) A layout of what the database tables should look like and how they should interact 
+* Visual Studio 
+* Azure Data Studio - to access our database and all of our stored data 
+* SQL Server 
+* Docker - to contain our database 
+* ASP.NET utilizing .NET Core 
+* c# 
+* swagger -to test out endpoints 
+* Postman - to test out endpoints 
 
 ### Packages installed: 
 
