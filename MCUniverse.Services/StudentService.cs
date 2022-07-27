@@ -58,6 +58,7 @@ namespace MCUniverse.Services
             var studentDetails = new StudentDetails
             {
                 Id = student.Id,
+                Email = student.Email,
                 FullName = student.FullName,
                 Gender = student.Gender,
                 DateOfBirth = student.DateOfBirth,
@@ -102,6 +103,7 @@ namespace MCUniverse.Services
                 .Select(Student => new StudentDetails
                 {
                     Id = Student.Id,
+                    Email = Student.Email,
                     FullName = Student.FullName,
                     Gender = Student.Gender,
                     DateOfBirth = Student.DateOfBirth,
@@ -125,6 +127,7 @@ namespace MCUniverse.Services
             var studentDetails = new StudentDetails
             {
                 Id = student.Id,
+                Email = student.Email,
                 FullName = student.FullName,
                 Gender = student.Gender,
                 DateOfBirth = student.DateOfBirth,
@@ -149,6 +152,7 @@ namespace MCUniverse.Services
         {
             var student = await _context.Students.FindAsync(model.Id);
             student.FullName = model.FullName;
+            student.Email = model.Email;
             student.Gender = model.Gender;
             student.DateOfBirth = model.DateOfBirth;
             student.Address = model.Address;
