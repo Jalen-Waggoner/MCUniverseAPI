@@ -89,8 +89,8 @@ namespace MCUniverse.WebAPI.Controllers
         public async Task<IActionResult> DeleteFacultyById(int facultyId)
         {
             return await _service.DeleteFacultyAsync(facultyId)
-                ? Ok($"Facutly Memeber {facultyId} was deleted successfully.")
-                : BadRequest($"Faculty Memeber {facultyId} could not be deleted.");
+                ? Ok($"Faculty Member {facultyId} was deleted successfully.")
+                : BadRequest($"Faculty Member {facultyId} could not be deleted.");
         }
 
 
