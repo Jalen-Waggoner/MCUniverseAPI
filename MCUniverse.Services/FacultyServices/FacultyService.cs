@@ -1,4 +1,4 @@
-﻿using MCUniverse.Data;
+using MCUniverse.Data;
 using MCUniverse.Data.Entities;
 using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
@@ -185,6 +185,19 @@ public class FacultyService : IFacultyService
         var faculty = await _context.Faculties.FindAsync(request.Id);
         
 
+
+    //var faculty = await _context.Faculties.FindAsync(facultyId);
+    //if (faculty.Id == 0)
+    //    return false;
+
+    //var course = _context.Courses.FindAsync(courseId);
+
+    //_context.Faculties.Courses.Add(course);
+
+    public async Task<Faculty> GetFacultyByEmailAsync(string email)
+    {
+        return await _context.Faculties.FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
+    }
         faculty.Id = request.Id;
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;
@@ -193,5 +206,5 @@ public class FacultyService : IFacultyService
 
         return numberOfChanges == 1;
     }
-}
+
 

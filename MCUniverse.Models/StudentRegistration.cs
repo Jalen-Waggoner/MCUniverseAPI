@@ -9,8 +9,7 @@ namespace MCUniverse.Models
 {
     public class StudentRegistration
     {
-        [Required]
-        public int Id { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -20,9 +19,6 @@ namespace MCUniverse.Models
         [Required]
         [MinLength(7)]
         public string Password { get; set; }
-        [Required]
-        [Compare("Password")]
-        public string ConfirmPassword { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string FullName { get; set; } = null!;
         public string Gender { get; set; } = null!;
@@ -31,5 +27,6 @@ namespace MCUniverse.Models
         public string PhoneNumber { get; set; }
         public string OriginCountry { get; set; } = null!;
         public DateTime DateCreated { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

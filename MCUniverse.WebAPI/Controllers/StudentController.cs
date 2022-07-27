@@ -27,55 +27,7 @@ namespace MCUniverse.WebAPI.Controllers
             _tokenService = tokenService;
         }
 
-        // GET: api/Student
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var students = await _service.GetAllStudentsAsync();
-            return Ok(students);
-        }
-
-        // GET: api/Students/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById([FromRoute]int id)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var students = await _service.GetStudentByIdAsync(id);
-            return Ok(students);
-
-        }
-
-        [HttpPost("~/api/TokenService")]
-        public async Task<IActionResult> Token([FromBody] TokenRequest request)
-            {
-                if(!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-            var tokenResponse = await _tokenService.GetTokenAsync(request);
-            if (tokenResponse is null)
-                return BadRequest("Invalid username or password.");
-
-            return Ok(tokenResponse);
-
-        }
-
-
-        // PUT: api/Student/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutStudent([FromBody]StudentUpdate Student)
-        {
-           if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-
-            return await _service.UpdateStudentByIdAsync(Student)
-                 ? Ok()
-                 : BadRequest(ModelState);
-        }
+        //STUDENT REGISTRATION
 
         // POST: api/Student
         [HttpPost("Register")]
@@ -94,27 +46,172 @@ namespace MCUniverse.WebAPI.Controllers
             return BadRequest("Student could not be registered.");
         }
 
+         // Get All Student
+        /* We have a couple of Get endpoints to our Student Controller to read from our Student table.
+         * In this method, we will return all Students from the database as an OK (200) response
+         * /*/
 
-        // DELETE: api/Student/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudentById([FromBody]int studentId)
+        // GET: api/Student
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudent()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var students = await _service.GetAllStudentsAsync();
+            return Ok(students);
+        }
+
+
+        // Get Student By Id
+
+        /* we are using async method called GetStudentById that also returns an IActionResult.Over here, our GetStudentById method will
+        * take in an Id as an integer parameter and use that to find and return a specific student.
+        */
+
+        // GET: api/Students/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStudentById([FromRoute] int id)
+        {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        var students = await _service.GetStudentByIdAsync(id);
+        return Ok(students);
+
+        }
+
+        //Get Student By Email
+
+        [HttpGet("Email/{email}")]
+        public async Task<IActionResult> GetStudentByEmail([FromRoute] string email)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByEmailAsync(email);
+            return Ok(students);
+
+        }
+
+        //Get Student By Username
+
+        [HttpGet("UserName/{username}")]
+        public async Task<IActionResult> GetStudentByUsername([FromRoute] string username)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetStudentByUsernameAsync(username);
+            return Ok(students);
+        }
+
+        // Token Request
+
+        /*[HttpPost("~/api/TokenService")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+                return BadRequest("Invalid username or password.");
+
+            return Ok(tokenResponse);
+
+        }*/
+
+         // Update Student By Id
+
+        /* To update a Student, we need a PUT endpoint. We are adding a method called Update Student By Id that takes in a Student Update 
+         * model and Id as parameters. */
+
+        // PUT: api/Student/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStudentById([FromBody] StudentUpdate Student)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return await _service.UpdateStudentByIdAsync(Student)
+                 ? Ok("Student was updated.")
+                 : BadRequest(ModelState);
+        }
+
+         //Delete Student By Id
+
+        /* Like the Get Student By Id and Update Student By Id methods, we will be deleting the student by their Id number.
+         *        
+         */
+
+         // DELETE: api/Student/5
+        [HttpDelete("{studentId}")]
+        public async Task<IActionResult> DeleteStudentById([FromRoute]int studentId)
         {
         
             return await _service.DeleteStudentByIdAsync(studentId)
                 ? Ok($"Student {studentId} was deleted sucessfully.")
                 : BadRequest($"Note{studentId} could not be deleted.");
         }
-/*
-       [Authorize]
+
+        // Enrolling Student By Id
+
+        [HttpPost("EnrollStudent/{StudentId}/{CourseId}")]
+        public async Task<IActionResult> EnrollingStudentById([FromRoute] int StudentId, int CourseId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var courses = await _service.EnrollingStudentById(StudentId, CourseId);
+            if (courses == false)
+                return NotFound("Invalid request.");
+
+            return Ok("Student successfully enrolled.");
+        }
+
+         // Get Course Enrollment By Id
+        // CourseEnrollment
+        [HttpGet("StudentId/{studentId}")]
+        public async Task<IActionResult> GetCourseEnrollmentById([FromRoute] int studentId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var students = await _service.GetCourseEnrollmentByIdAsync(studentId);
+            return Ok(students);
+
+        }
+
+        [HttpPut("UpdateCourseEnrollment/{studentId}/{oldCourseId}/{newCourseId}")]
+        public async Task<IActionResult> UpdateCourseEnrollmentById([FromRoute]int studentId, int oldCourseId, int newCourseId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var courses = await _service.UpdateCourseEnrollmentByIdAsync(studentId, oldCourseId, newCourseId);
+            if (courses == false)
+                return NotFound("Invalid request.");
+
+            return Ok("Student's information was updated.");
+
+        }
+
+
+        // DELETE: api/Student/5
+        [HttpDelete("DeleteCourse/{studentId}/{oldCourseId}")]
+        public async Task<IActionResult> DeleteStudentEnrollmentById([FromRoute] int studentId, int oldCourseId)
+        {
+
+            return await _service.DeleteStudentEnrollmentByIdAsync(studentId, oldCourseId)
+                ? Ok($"Student's enrollment {studentId} was deleted sucessfully.")
+                : BadRequest($"Note{studentId} could not be deleted.");
+        }
+
+
+
+        /*  [Authorize]
         [HttpGet("{studentId:int}")]
         public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
-            var student = await _service.GetStudentByIdAsync(studentId);
-
-            return Ok(student);
-        }*/
-        
-     }
- }
+        var student = await _service.GetStudentByIdAsync(studentId);
+            return Ok(student); */
 
 
