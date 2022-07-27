@@ -1,5 +1,6 @@
 ﻿using MCUniverse.Data;
 using MCUniverse.Data.Entities;
+using MCUniverse.Models.Course;
 using MCUniverse.Models.FacultyModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,16 +14,16 @@ namespace MCUniverse.Services.FacultyServices;
 public class FacultyService : IFacultyService
 {
     private readonly AppDbContext _context;
+
     public FacultyService(AppDbContext context)
     {
         _context = context;
     }
 
+
+    //Create a Faculty Member
     public async Task<bool> RegisterFacultyAysnc(FacultyCreate faculty)
     {
-        if (await GetFacultyByEmailAsync(faculty.Email) != null || await GetFacultyByUserNameAsync(faculty.UserName) != null)
-            return false;
-
         var entity = new Faculty
         {
             UserName = faculty.UserName,
@@ -38,6 +39,9 @@ public class FacultyService : IFacultyService
         return numberOfChanges == 1;
     }
 
+
+
+    //GET Faculty by Id
     public async Task<FacultyDetail> GetFacultyByIdAsync(int facultyId)
     {
         var entity = await _context.Faculties.FindAsync(facultyId);
@@ -57,6 +61,8 @@ public class FacultyService : IFacultyService
     }
 
 
+
+    //Get List of All Faculty Members
     public async Task<IEnumerable<FacultyListItem>> GetAllFacultyAsync()
     {
         var faculties = await _context.Faculties.
@@ -76,21 +82,19 @@ public class FacultyService : IFacultyService
     }
 
 
-    public async Task<bool> UpdateFacultyAsync(FacultyUpdate request)
-    {
-        if (await GetFacultyByEmailAsync(request.Email) != null || await GetFacultyByUserNameAsync(request.UserName) != null)
-            return false;
 
+    //Update a Faculty Member By Id
+    public async Task<bool> UpdateFacultyAsync(FacultyUserInfoUpdate request)
+    { 
         var faculty = await _context.Faculties.FindAsync(request.Id);
 
-        faculty.UserName = request.UserName;
-        faculty.Password = request.Password;
+        faculty.Id = request.Id;
         faculty.Email = request.Email;
         faculty.FirstName = request.FirstName;
         faculty.LastName = request.LastName;
         faculty.PhoneNumber = request.PhoneNumber;
         faculty.Gender = request.Gender;
-        
+
         var numberOfChanges = await _context.SaveChangesAsync();
 
         return numberOfChanges == 1;
@@ -98,6 +102,7 @@ public class FacultyService : IFacultyService
 
 
 
+    //Delete a Faculty Member By Id
     public async Task<bool> DeleteFacultyAsync(int facultyId)
     {
         var faculty = await _context.Faculties.FindAsync(facultyId);
@@ -111,14 +116,82 @@ public class FacultyService : IFacultyService
     }
 
 
-    public async Task<Faculty> GetFacultyByEmailAsync(string email)
+
+    //Get List of All Courses Assigned to a Faculty Member By Id
+    public async Task<IEnumerable<CourseListItem>> ListCoursesByFacultyIdAsync(int facultyId)
     {
-        return await _context.Faculties.FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
+        var courses = await _context.Courses.Where(c => c.FacultyId == facultyId)
+            .Select(c => new CourseListItem
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Credits = c.Credits,
+                Semester = c.Semester,
+            }).ToListAsync();
+
+        if (courses.Count == 0)
+            return null;
+
+        return courses;
     }
 
-    public async Task<Faculty> GetFacultyByUserNameAsync(string userName)
+
+
+    //Assign a Course to a Faculty Memeber By the Course Id and the Faculty Id
+    public async Task<bool> AssignCourseToFacultyMemeberAsync(int courseId, int facultyId)
     {
-        return await _context.Faculties.FirstOrDefaultAsync(f => f.UserName.ToLower() == userName.ToLower());
+        var course = await _context.Courses.FindAsync(courseId);
+
+        course.FacultyId = facultyId;
+
+        var numberOfChanges = await _context.SaveChangesAsync();
+
+        return numberOfChanges == 1;
+    }
+
+
+
+    //Search for a Faculty Member By FirstName or LastName
+    public async Task<IEnumerable<FacultyDetail>> SearchFacultyByNameAsync(string search)
+    {
+        if (search == null)
+            return null;
+
+        search = search.ToLower();
+            var faculties = await _context.Faculties.Where(f =>
+            f.FirstName.ToLower() == search ||
+            f.LastName.ToLower() == search)
+            .Select(f => new FacultyDetail
+            {
+                Id = f.Id,
+                UserName = f.UserName,
+                Email = f.Email,
+                FirstName = f.FirstName,
+                LastName = f.LastName,
+                PhoneNumber = f.PhoneNumber,
+            }
+            ).ToListAsync();
+
+        if (faculties.Count() == 0)
+            return null;
+
+        return faculties;
+    }
+
+
+    //Update Faculty UserName and Password
+    public async Task<bool> UpdateFacultyUserNameAndPasswordAsync(FacultyLogInUpdate request)
+    {
+        var faculty = await _context.Faculties.FindAsync(request.Id);
+        
+
+        faculty.Id = request.Id;
+        faculty.UserName = request.UserName;
+        faculty.Password = request.Password;
+
+        var numberOfChanges = await _context.SaveChangesAsync();
+
+        return numberOfChanges == 1;
     }
 }
 

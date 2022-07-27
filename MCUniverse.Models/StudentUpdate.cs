@@ -25,5 +25,8 @@ namespace MCUniverse.Models
         public string OriginCountry { get; set; }
         [Required]
         public DateTime DateCreated { get; set; }
-         }
+        [Required]
+        public DateTime LastModified { get; set; }
+
+        }
 }

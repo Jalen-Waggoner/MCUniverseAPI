@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +10,11 @@ using MCUniverse.Data;
 using MCUniverse.Models.Course;
 using MCUniverse.Services;
 
-namespace MCUniverse.WebAPI.Controllers
+namespace MCUniverse.WebAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CourseController : ControllerBase
 {
     // Sets route for URL after https://localhost:xxxx/
     // Controller name is course
@@ -71,7 +75,6 @@ namespace MCUniverse.WebAPI.Controllers
             // Returns the variable that is a list of courses from the service method
             return Ok(courses);
         }
-
 
 
 
@@ -176,7 +179,7 @@ namespace MCUniverse.WebAPI.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteCourse([FromQuery] int courseId)
         {
-            return await _cService.DeleteCourseAsync(courseId)
+             return await _cService.DeleteCourseAsync(courseId)
                 ? Ok("Course was successfully deleted")
                 : BadRequest("Course could not be deleted");
         }
@@ -198,3 +201,4 @@ namespace MCUniverse.WebAPI.Controllers
         }
     }
 }
+
