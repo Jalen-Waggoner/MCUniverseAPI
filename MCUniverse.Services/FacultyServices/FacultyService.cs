@@ -183,6 +183,7 @@ public class FacultyService : IFacultyService
     public async Task<bool> UpdateFacultyUserNameAndPasswordAsync(FacultyLogInUpdate request)
     {
         var faculty = await _context.Faculties.FindAsync(request.Id);
+
         faculty.Id = request.Id;
         faculty.UserName = request.UserName;
         faculty.Password = request.Password;

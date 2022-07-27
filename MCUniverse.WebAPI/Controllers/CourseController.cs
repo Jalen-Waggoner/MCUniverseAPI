@@ -11,7 +11,8 @@ using MCUniverse.Models.Course;
 using MCUniverse.Services;
 
 namespace MCUniverse.WebAPI.Controllers
-{
+{ 
+
 
     // Sets route for URL after https://localhost:xxxx/
     // Controller name is course
@@ -19,7 +20,6 @@ namespace MCUniverse.WebAPI.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-
 
 
         // Calls tasks from the IService interface to return the desired outcome from each task
@@ -54,7 +54,7 @@ namespace MCUniverse.WebAPI.Controllers
                 // If a 200 response is recieved, it should display: Course created successfully
                 return Ok("Course created successfully");
             }
-
+            
             // Gives a 404 response, which mean that the process could not be completed due to an error
             return BadRequest("Course could not be created");
 
@@ -177,9 +177,9 @@ namespace MCUniverse.WebAPI.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteCourse([FromQuery] int courseId)
         {
-            return await _cService.DeleteCourseAsync(courseId)
-               ? Ok("Course was successfully deleted")
-               : BadRequest("Course could not be deleted");
+             return await _cService.DeleteCourseAsync(courseId)
+                ? Ok("Course was successfully deleted")
+                : BadRequest("Course could not be deleted");
         }
 
 
@@ -197,7 +197,5 @@ namespace MCUniverse.WebAPI.Controllers
             var course = await _cService.ShowStudentsbyCourseIdAsync(courseId);
             return Ok(course);
         }
-
     }
 }
-
