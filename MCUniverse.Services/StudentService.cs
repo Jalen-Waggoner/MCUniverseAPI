@@ -23,7 +23,7 @@ namespace MCUniverse.Services
         }
         public async Task<bool> RegisterStudentAsync(StudentRegistration model)
         {
-            
+
             var student = new Student()
             {
                 Username = model.Username,
@@ -48,12 +48,12 @@ namespace MCUniverse.Services
             return numberOfChanges == 1;
         }
 
-      
+
         public async Task<StudentDetails> GetStudentByEmailAsync(string email)
         {
             var student = await _context.Students
             .FirstOrDefaultAsync(student => student.Email.ToLower() == email.ToLower());
-            if(student == null)
+            if (student == null)
                 return null;
             var studentDetails = new StudentDetails
             {
@@ -76,7 +76,7 @@ namespace MCUniverse.Services
            .FirstOrDefaultAsync(student => student.Username.ToLower() == username.ToLower());
             if (student == null)
                 return null;
-            
+
             var studentregistration = new StudentRegistration
             {
                 Username = student.Username,
@@ -117,6 +117,7 @@ namespace MCUniverse.Services
             return students;
         }
 
+        // Asynchronously finds an entity with the given primary key values (StudentId)
         public async Task<StudentDetails> GetStudentByIdAsync(int studentId)
         {
             var student = await _context.Students.FindAsync(studentId);
@@ -146,7 +147,6 @@ namespace MCUniverse.Services
 
         public async Task<bool> UpdateStudentByIdAsync(StudentUpdate model)
         {
-
             var student = await _context.Students.FindAsync(model.Id);
             student.FullName = model.FullName;
             student.Gender = model.Gender;
@@ -198,15 +198,73 @@ namespace MCUniverse.Services
                 Name = s.Name,
                 Credits = s.Credits,
                 Semester = s.Semester
-            
+
             }).ToList();
             return CourseEnrollmentInfo;
 
+        }
+
+        public async Task<bool> UpdateCourseEnrollmentByIdAsync(int studentId, int oldCourseId, int newCourseId)
+        {
+            // get the student to change; include his courses
+          var student = await _context.Students
+            .Include(student => student.courses)
+            .Where(student => student.Id == studentId)
+            .FirstOrDefaultAsync();
+            if (student == null)
+                return false;
+
+            // Stop the course
+            var oldCourse = student.courses
+            .Where(course => course.Id == oldCourseId)
+            .FirstOrDefault();
+
+            if (oldCourse != null)
+            {
+                // This Student follows this cours; stop it:
+                student.courses.Remove(oldCourse);
+            }
+
+            var newCourse = await _context.Courses
+            .Where(course => course.Id == newCourseId)
+             .FirstOrDefaultAsync();
+
+            // only start the course if course exists and not already following
+            if (newCourse != null && !student.courses.Contains(newCourse))
+            {
+                student.courses.Add(newCourse);
+            }
+
+            return await _context.SaveChangesAsync() == 1;
 
         }
 
+        public async Task<bool> DeleteStudentEnrollmentByIdAsync(int studentId, int oldCourseId)
+        {
+          var student = await _context.Students
+         .Include(student => student.courses)
+         .Where(student => student.Id == studentId)
+         .FirstOrDefaultAsync();
+            if (student == null)
+                return false;
+            // Stop the course
+            var oldCourse = student.courses
+            .Where(course => course.Id == oldCourseId)
+            .FirstOrDefault();
+
+            if (oldCourse != null)
+            {
+                // This Student follows this cours; stop it:
+                student.courses.Remove(oldCourse);
+            }
+
+           return await _context.SaveChangesAsync() == 1;
+
+        }
     }
 }
+
+      
 
 
 

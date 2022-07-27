@@ -11,15 +11,20 @@ namespace MCUniverse.Services
 {
     public interface IStudentService
     {
+        // School website registration 
         Task<bool> RegisterStudentAsync(StudentRegistration model);
-        Task<StudentDetails> GetStudentByEmailAsync(string email);
-        Task<IEnumerable<StudentDetails>> GetAllStudentsAsync();
-        Task<StudentRegistration> GetStudentByUsernameAsync(string username);
         Task<StudentDetails> GetStudentByIdAsync(int studentId);
-        Task<bool> DeleteStudentByIdAsync(int studentId);
+        Task<IEnumerable<StudentDetails>> GetAllStudentsAsync();
+        Task<StudentDetails> GetStudentByEmailAsync(string email);
+        Task<StudentRegistration> GetStudentByUsernameAsync(string username);
         Task<bool> UpdateStudentByIdAsync(StudentUpdate model);
+        Task<bool> DeleteStudentByIdAsync(int studentId);
+
+        // Course enrollment
         Task<bool> EnrollingStudentById(int StudentId, int CourseId);
         Task<IEnumerable<CourseListItem>> GetCourseEnrollmentByIdAsync(int studentId);
+        Task<bool> UpdateCourseEnrollmentByIdAsync(int studentId, int oldCourseId, int newCourseId);
+        Task<bool> DeleteStudentEnrollmentByIdAsync(int studentId, int oldCourseId);
 
 
 

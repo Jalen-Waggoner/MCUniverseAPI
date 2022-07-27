@@ -37,6 +37,13 @@ namespace MCUniverse.Data.Entities
         [Required]
         public DateTime LastModified { get; set; }
         
+       /* Many to many relationship with CourseEntity. Student can join multiply courses / multiple students can join one course and courses
+        can have many students.*/
+       /*EntityFramework automatically creates a joining table with the name of both Student & Coures entities.
+        The joining table will be CourseEntityStudent(in database) with two primary keys StudentId and CourseId which 
+       will be the Foreign keys*/
+
+
         public virtual List<CourseEntity> courses { get; set; } = new List<CourseEntity>();
 
        }

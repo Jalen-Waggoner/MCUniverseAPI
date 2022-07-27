@@ -14,6 +14,7 @@ namespace MCUniverse.Models
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
+
 /*       [EmailAddress]
         public string Email { get; set; }
 
@@ -32,6 +33,7 @@ namespace MCUniverse.Models
             get => _confirmPassword;
             set => _confirmPassword = replaceEmptyWithNull(value);
         }*/
+
         public string PhoneNumber { get; set; }
         public string OriginCountry { get; set; }
         public DateTime DateCreated { get; set; }
